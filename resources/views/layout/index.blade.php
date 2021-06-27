@@ -1,0 +1,5 @@
+@include('layout.head', $data)
+@include('layout.header')
+@include('layout.sidebar')
+@include($data['content'], $data)
+@include('layout.footer')

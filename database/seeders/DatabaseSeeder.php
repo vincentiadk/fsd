@@ -3,6 +3,11 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
+use App\Models\Kabupaten;
+use App\Models\Kecamatan;
+use App\Models\Kelurahan;
+use App\Models\Provinsi;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,6 +18,24 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        $this->reset();
+        $this->call(RoleSeeder::class);
+        $this->call(UserSeeder::class);
+        $this->call(ProvincesSeeder::class);
+        $this->call(CitiesSeeder::class);
+        $this->call(DistrictsSeeder::class);
+        $this->call(VillagesSeeder::class);
+    }
+
+    public function reset()
+    {
+        Schema::disableForeignKeyConstraints();
+
+        Kelurahan::truncate();
+        Kecamatan::truncate();
+        Kabupaten::truncate();
+        Provinsi::truncate();
+
+        Schema::disableForeignKeyConstraints();
     }
 }
