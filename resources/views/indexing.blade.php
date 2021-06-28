@@ -15,7 +15,7 @@
 <!-- Content Wrapper. Contains page content -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.943/pdf.min.js">
 </script>
-<form method="POST" action="{{ url('admin/nasabah/store') }}">
+<form method="POST" action="{{ url('admin/nasabah/store') }}" id="form_data">
     @csrf
     <div class="content-wrapper kanban">
 
@@ -30,11 +30,27 @@
                         <h1>BELUM ADA DATA BARU</h1>
                     </div>
                 </div>
+            </div>
         </section>
         @else
         <!-- Main content -->
         <section class="content pb-3">
             <div class="container-fluid h-100">
+                <div class="alert alert-danger" id="validasi_element" style="display:none;">
+                    <ul id="validasi_content"></ul>
+                </div>
+                @if($data['file'] == '')
+                <div class="card card-row card-primary card-tabs" style="width:700px">
+                    <div class=" card-header">
+                        <h3 class="card-title">Indexing</h3>
+                    </div>
+                    <div class="card-body text-center">
+                        <div style="height:300px">
+                            <h1>FILE BELUM DIUPLOAD</h1>
+                        </div>
+                    </div>
+                </div>
+                @else
                 <div class="card card-row card-primary card-tabs" style="width:700px">
                     <div class="card-header p-0 pt-1">
                         <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
@@ -101,6 +117,7 @@
                     </div>
                     <!-- /.card -->
                 </div>
+                @endif
                 <div class="card card-row card-secondary">
                     <input type="hidden" name="id_nasabah" value="{{ $data['nasabah']->id }}">
                     <div class="card-header">
@@ -116,7 +133,7 @@
                                     </span>
                                 </div>
                                 <input type="text" value="{{ $data['nasabah']->nama}}" class="form-control"
-                                    @if(session("role_id")==4) readonly @endif>
+                                    @if(session("role_id")!=3) readonly @endif name="nama">
                             </div>
                         </div>
                         <div class="form-group">
@@ -127,7 +144,7 @@
                                     </span>
                                 </div>
                                 <input type="text" value="{{ $data['nasabah']->no_identitas}}" class="form-control"
-                                    @if(session("role_id")==4) readonly @endif>
+                                    @if(session("role_id")!=3) readonly @endif name="no_identitas">
                             </div>
                         </div>
                         <div class="form-group">
@@ -138,7 +155,7 @@
                                     </span>
                                 </div>
                                 <input type="text" value="{{ $data['nasabah']->alamat_1}}" class="form-control"
-                                    @if(session("role_id")==4) readonly @endif>
+                                    @if(session("role_id")!=3) readonly @endif name="alamat_1">
                             </div>
                         </div>
                         <div class="form-group">
@@ -149,7 +166,7 @@
                                     </span>
                                 </div>
                                 <input type="text" value="{{ $data['nasabah']->rt}}" class="form-control"
-                                    @if(session("role_id")==4) readonly @endif>
+                                    @if(session("role_id")!=3) readonly @endif name="rt">
                             </div>
                         </div>
                         <div class="form-group">
@@ -160,7 +177,7 @@
                                     </span>
                                 </div>
                                 <input type="text" value="{{ $data['nasabah']->rw}}" class="form-control"
-                                    @if(session("role_id")==4) readonly @endif>
+                                    @if(session("role_id")!=3) readonly @endif name="rw">
                             </div>
                         </div>
                         <div class="form-group">
@@ -170,9 +187,13 @@
                                         Provinsi
                                     </span>
                                 </div>
-                                <input type="text"
-                                    value="{{ $data['nasabah']->provinsi ? $data['nasabah']->provinsi->name : ''}}"
-                                    class="form-control" @if(session("role_id")==4) readonly @endif>
+                                <select name="provinsi_id" class="form-control" @if(session("role_id")!=3) disabled
+                                    @endif id="provinsi_id">
+                                    @foreach(App\Models\Provinsi::all() as $provinsi)
+                                    <option value="{{ $provinsi->id }}" @if($data['nasabah']->provinsi_id ==
+                                        $provinsi->id) selected @endif>{{ $provinsi->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
@@ -182,9 +203,14 @@
                                         Kota / Kabupaten
                                     </span>
                                 </div>
+                                @if(session('role_id') != 3)
                                 <input type="text"
                                     value="{{ $data['nasabah']->kabupaten ? $data['nasabah']->kabupaten->name : ''}}"
-                                    class="form-control" @if(session("role_id")==4) readonly @endif>
+                                    class="form-control" disabled>
+                                @else
+                                <select name="kabupaten_id" class="form-control" id="kabupaten_id">
+                                </select>
+                                @endif
                             </div>
                         </div>
                         <div class="form-group">
@@ -194,9 +220,14 @@
                                         Kecamatan
                                     </span>
                                 </div>
+                                @if(session('role_id') != 3)
                                 <input type="text"
                                     value="{{ $data['nasabah']->kecamatan ? $data['nasabah']->kecamatan->name : ''}}"
-                                    class="form-control" @if(session("role_id")==4) readonly @endif>
+                                    class="form-control" disabled>
+                                @else
+                                <select name="kecamatan_id" class="form-control" id="kecamatan_id">
+                                </select>
+                                @endif
                             </div>
                         </div>
                         <div class="form-group">
@@ -206,9 +237,14 @@
                                         Kelurahan
                                     </span>
                                 </div>
+                                @if(session('role_id') != 3)
                                 <input type="text"
-                                    value="{{ $data['nasabah']->kelurahan ? $data['nasabah']->kelurahan->name : '' }}"
-                                    class="form-control" @if(session("role_id")==4) readonly @endif>
+                                    value="{{ $data['nasabah']->kelurahan ? $data['nasabah']->kelurahan->name : ''}}"
+                                    class="form-control" disabled>
+                                @else
+                                <select name="kelurahan_id" class="form-control" id="kelurahan_id">
+                                </select>
+                                @endif
                             </div>
                         </div>
                         <div class="form-group">
@@ -219,7 +255,7 @@
                                     </span>
                                 </div>
                                 <input type="text" value="{{ $data['nasabah']->telp_hp}}" class="form-control"
-                                    @if(session("role_id")==4) readonly @endif>
+                                    @if(session("role_id")!=3) readonly @endif name="telp_hp">
                             </div>
                         </div>
                         <div class="form-group">
@@ -230,7 +266,7 @@
                                     </span>
                                 </div>
                                 <input type="text" value="{{ $data['nasabah']->email}}" class="form-control"
-                                    @if(session("role_id")==4) readonly @endif>
+                                    @if(session("role_id")!=3) readonly @endif name="email">
                             </div>
                         </div>
                         <div class="form-group">
@@ -241,17 +277,17 @@
                                     </span>
                                 </div>
                                 <input type="text" value="{{ $data['nasabah']->nama_ibu_kandung}}" class="form-control"
-                                    @if(session("role_id")==4) readonly @endif>
+                                    @if(session("role_id")!=3) readonly @endif name="nama_ibu_kandung">
                             </div>
                         </div>
                         <div class="form-group">
                             @if(session("role_id") == 3)
-                            <button class="btn btn-primary" type="submit">Update</button>
+                            <button class="btn btn-primary" type="submit" onclick="simpan()">Update</button>
                             @endif
                             @if(session("role_id") == 4)
-                            <input type='button' name="submit" class="btn btn-warning" value="Salah">
-                            <input type='button' name="submit" class="btn btn-danger" value="Tolak">
-                            <input type='button' name="submit" class="btn btn-success" value="Benar">
+                            <input type='button' name="submit" class="btn btn-danger" onclick="simpan()" value="Tolak">
+                            <input type='button' name="submit" class="btn btn-warning" onclick="simpan()" value="Salah">
+                            <input type='button' name="submit" class="btn btn-success" onclick="simpan()" value="Benar">
                             @endif
                         </div>
                     </div>
@@ -293,6 +329,10 @@ pdfjsLib.getDocument('{{ $data["file"] }}').then((pdf) => {
     renderOnCanvas("pdf_formulir", formulir);
     renderOnCanvas("pdf_kk", kk);
 });
+
+select2AutoSuggest('#kabupaten_id', 'kabupaten', 'provinsi_id');
+select2AutoSuggest('#kecamatan_id', 'kecamatan', 'kabupaten_id');
+select2AutoSuggest('#kelurahan_id', 'kelurahan', 'kecamatan_id');
 
 function zoomIn(name) {
     event.preventDefault();
@@ -345,6 +385,59 @@ function renderOnCanvas(canvas_name, state) {
             canvasContext: ctx,
             viewport: viewport
         });
+    });
+}
+
+
+
+function simpan() {
+    event.preventDefault();
+    var formData = new FormData($('#form_data')[0]);
+    $.ajax({
+        url: '{{ url("admin/nasabah/store") }}',
+        type: 'POST',
+        dataType: 'JSON',
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        beforeSend: function() {
+            loadingOpen('.content');
+            $('#validasi_element').hide();
+            $('#validasi_content').html('');
+        },
+        success: function(response) {
+            loadingClose('.content');
+            if (response.status == 200) {
+                window.open('{{ url('') }}' + "/admin/nasabah/" + response.page, "_self");
+            } else if (response.status == 422) {
+                $('#validasi_element').show();
+                Toast.fire({
+                    icon: 'info',
+                    title: 'Validasi'
+                });
+
+                $.each(response.error, function(i, val) {
+                    $('#validasi_content').append('<li>' + val + '</li>');
+                })
+            } else {
+                Toast.fire({
+                    icon: 'warning',
+                    title: response.message
+                });
+            }
+        },
+        error: function() {
+            loadingClose('.content');
+            Toast.fire({
+                icon: 'error',
+                title: 'Server Error!'
+            });
+        }
+
     });
 }
 </script>

@@ -27,6 +27,7 @@ class AuthController extends Controller
                             'role_id' => $query->first()->role_id,
                             'email' => $query->first()->email,
                             'name'  => $query->first()->name,
+                            'last_login' => now()
                         ]);
                         Log::create([
                             'user_id'   => session('id'),

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\NasabahExport;
 use App\Models\Log;
 use App\Models\Nasabah;
+use App\Helper\Helper;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -12,9 +13,13 @@ class ReportController extends Controller
 {
     public function index()
     {
+        if(session('role_id') != 1) {
+            return abort(403);
+        }
         $data = [
             'title' => 'Reporting',
             'content' => 'report',
+            'logs'  => Helper::getLogs(session('id'))
         ];
         return view('layout.index', ['data' => $data]);
     }
@@ -50,7 +55,7 @@ class ReportController extends Controller
                 $tanggal_lapor = $val->tanggal_lapor != null ? date('d-m-Y', strtotime($val->tanggal_lapor)) : '';
                 $response['data'][] = [
                     '<input type="checkbox" id="chkReport_' . $val->id . '" name="chkReport" value="' . $val->id . '">
-                     <a href="/admin/nasabah/'.$val->id.'" class="btn btn-primary"> Detail </a>
+                     <a href="/admin/nasabah/'.$val->id.'/view" class="btn btn-primary"> Detail </a>
                     ',
                     $val->cif,
                     $val->no_rek,
@@ -60,11 +65,11 @@ class ReportController extends Controller
                     $val->status,
                     $index_time,
                     $tanggal_lapor,
-                    $val->jenis_kelamin(),
+                    $val->jenis_kelamin,
                     $val->no_identitas,
                     $val->npwp,
-                    $val->status_kawin(),
-                    $val->agama(),
+                    $val->status_kawin,
+                    $val->agama,
                 ];
             }
         }
@@ -140,11 +145,6 @@ class ReportController extends Controller
                 'tanggal_lapor' => request('set_lapor'),
                 'status' => 'tuntas',
             ]);
-        Log::create([
-            'user_id' => session('id'),
-            'activity' => 'export',
-            'description' => 'tanggal lapor : ' . request('set_lapor'),
-        ]);
         return response()->json($return);
     }
 }

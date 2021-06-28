@@ -17,18 +17,28 @@ class RoleSeeder extends Seeder
         DB::table('roles')->insert([
             [
                 'name' => 'manager',
+                'created_at' => now(), 
+                'updated_at' => now()
             ],
             [
                 'name' => 'operator scan',
+                'created_at' => now(), 
+                'updated_at' => now()
             ],
             [
                 'name' => 'operator index',
+                'created_at' => now(), 
+                'updated_at' => now()
             ],
             [
                 'name' => 'supervisor',
+                'created_at' => now(), 
+                'updated_at' => now()
             ],
             [
                 'name' => 'client',
+                'created_at' => now(), 
+                'updated_at' => now()
             ],
         ]
         );

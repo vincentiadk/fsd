@@ -8,6 +8,7 @@ use App\Models\Kabupaten;
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
 use App\Models\Provinsi;
+use Illuminate\Support\Facades\File;
 
 class DatabaseSeeder extends Seeder
 {
@@ -25,6 +26,8 @@ class DatabaseSeeder extends Seeder
         $this->call(CitiesSeeder::class);
         $this->call(DistrictsSeeder::class);
         $this->call(VillagesSeeder::class);
+        File::cleanDirectory(public_path('nasabah'));
+        File::cleanDirectory(public_path('excel'));
     }
 
     public function reset()

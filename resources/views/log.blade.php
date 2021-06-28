@@ -57,7 +57,7 @@ $('#datatable_serverside').DataTable({
             name: 'no',
             searchable: false,
             orderable: false,
-            className: 'align-middle text-center'
+            className: 'align-middle'
         },
         {
             name: 'nama',
@@ -69,19 +69,19 @@ $('#datatable_serverside').DataTable({
             name: 'aktifitas',
             searchable: false,
             orderable: false,
-            className: 'align-middle text-center'
+            className: 'align-middle '
         },
         {
             name: 'keterangan',
             searchable: false,
             orderable: false,
-            className: 'align-middle text-center'
+            className: 'align-middle '
         },
         {
             name: 'waktu',
             searchable: false,
             orderable: false,
-            className: 'align-middle text-center'
+            className: 'align-middle '
         },
     ]
 });

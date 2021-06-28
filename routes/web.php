@@ -30,7 +30,7 @@ Route::middleware('auth.admin.login')->group(function () {
         Route::get('map', 'MapController@index');
         Route::post('map/store', 'MapController@store');
 
-        Route::get('nasabah/{id}', 'NasabahController@view');
+        Route::get('nasabah/{id}/view', 'NasabahController@view');
         Route::get('nasabah/qc', 'NasabahController@qc');
         Route::get('nasabah/indexing', 'NasabahController@indexing');
         Route::post('nasabah/store', 'NasabahController@store');
@@ -43,12 +43,19 @@ Route::middleware('auth.admin.login')->group(function () {
         Route::get('import', 'ImportController@index');
         Route::post('import', 'ImportController@import');
 
+        Route::post('select2/provinsi', 'Select2Controller@getProvinsi');
+        Route::post('select2/kabupaten', 'Select2Controller@getKabupaten');
+        Route::post('select2/kecamatan', 'Select2Controller@getKecamatan');
+        Route::post('select2/kelurahan', 'Select2Controller@getKelurahan');
+
         Route::get('upload', 'UploadController@index');
         Route::post('upload/store', 'UploadController@store');
 
         Route::get('user', 'UserController@index');
         Route::post('user/datatable', 'UserController@datatable');
         Route::post('user/store', 'UserController@store');
+        Route::get('user/view/{id}', 'UserController@view');
+        Route::get('user/setting', 'UserController@setting');
 
     });
 });

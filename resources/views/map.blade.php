@@ -2,7 +2,7 @@
 <div class="content-wrapper">
     <!-- Main content -->
     <section class="content">
-        <form action="/admin/import" method="post" enctype="multipart/form-data">
+        <form action="/admin/map/store" method="post" enctype="multipart/form-data">
             {{ csrf_field() }}
             <!-- Default box -->
             <div class="card">
@@ -16,11 +16,17 @@
                     </div>
                     <div class="form-group">
                         <label>Dokumen</label>
-                        <input name="no_rek" type="text" id="no_rek" class="form-control">
+                        <select name="no_rek"  class="form-control">
+                            @foreach($data['nasabah'] as $nasabah)
+                            <option value="{{ $nasabah->id }}" > {{ $nasabah->no_rek }} </option>>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="card-footer">
-                    
+                    <button class="btn btn-primary">Simpan</button>    
+                <div class="form-group">
+                    </div>
                 </div>
             </div>
         </form>

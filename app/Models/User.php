@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Log;
 
 class User extends Authenticatable
 {
@@ -71,5 +72,37 @@ class User extends Authenticatable
                 break;
         }
         return $return;
+    }
+    protected static function boot()
+    {
+        parent::boot();
+
+        self::created(function ($model) {
+            Log::create([
+                'activity' => 'create',
+                'logable_type'  => 'users',
+                'logable_id'    => $model->id,
+                'user_id'   => session('id'),
+                'description' => json_encode($model->toArray())
+            ]);
+        });
+        self::updated(function ($model) {
+            if($model->wasChanged('password')) {
+                Log::create([
+                    'activity' => 'change password',
+                    'logable_type'  => 'users',
+                    'logable_id'    => $model->id,
+                    'user_id'   => session('id'),
+                ]);
+            } else {
+                Log::create([
+                    'activity' => 'update',
+                    'logable_type'  => 'users',
+                    'logable_id'    => $model->id,
+                    'user_id'   => session('id'),
+                    'description' => json_encode($model->getChanges())
+                ]);
+            }
+        });
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Nasabah;
+use App\Helper\Helper;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -47,6 +48,7 @@ class DashboardController extends Controller
                 ];
                 break;
         }
+        $data['logs'] = Helper::getLogs(session('id'));
 
         return view('layout.index', ['data' => $data]);
     }

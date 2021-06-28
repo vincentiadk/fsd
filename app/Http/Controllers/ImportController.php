@@ -2,44 +2,65 @@
 
 namespace App\Http\Controllers;
 
-use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Http\Request;
-use App\Models\Log;
+use App\Helper\Helper;
 use App\Imports\NasabahImport;
+use App\Models\Log;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ImportController extends Controller
 {
     public function index()
     {
+        if(session('role_id') != 1) {
+            return abort(403);
+        }
         $data = [
             'title' => 'Import Database',
             'content' => 'import',
+            'logs' => Helper::getLogs(session('id')),
         ];
         return view('layout.index', ['data' => $data]);
     }
 
     public function import(Request $request)
     {
-        //Validasi
-		$this->validate($request, [
-			'excel' => 'required|mimes:xls,xlsx'
-		]);
-		
-		$file = $request->file('excel');
-		$nama_file = rand().$file->getClientOriginalName();
-		$file->move('excel', $nama_file);
-		
-		Excel::import(new NasabahImport, public_path('excel/'.$nama_file));
-
-		Log::create([
-            'user_id'   => session('id'),
-            'activity'  => 'import'
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|mimes:xls,xlsx',
+        ], [
+            'file.required' => 'Harap isi file!',
+            'file.mimes' => 'File yang diterima hanya .xls dan .xlsx',
         ]);
-		session()->flash('success', 'Berhasil mengimport data nasabah!');
+        $file = $request->file('file');
+        if ($validator->fails()) {
+            $response = [
+                'status' => 422,
+                'error' => $validator->errors(),
+                'file_name' => $file->getClientOriginalName()
+            ];
+            return response()->json($response);
+        } else {
+            $nama_file = rand() . $file->getClientOriginalName();
+            $file->move('excel', $nama_file);
+
+            $import = new NasabahImport;
+            Excel::import($import, public_path('excel/' . $nama_file));
+
+            Log::create([
+                'user_id' => session('id'),
+                'activity' => 'import',
+                'description' => json_encode($import->getStatus()),
+            ]);
+
             $response = [
                 'status' => 200,
-                'message' => 'Berhasil mengimport',
+                'message' => 'Berhasil mengimport data nasabah!',
+                'import' => $import->getStatus()['import'],
+                'skip' => $import->getStatus()['skip'],
+                'file_name' => $file->getClientOriginalName()
             ];
-        return response()->json($response);
+            return response()->json($response);
+        }
     }
 }

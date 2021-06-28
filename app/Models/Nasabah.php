@@ -84,10 +84,11 @@ class Nasabah extends Model
         'simpan_user',
         'simpan_time',
         'tanggal_lapor',
-        'map'
+        'map',
+        'email'
     ];
 
-    public function risiko()
+    /*public function risiko()
     {
         switch ($this->risiko) {
             case '1':
@@ -276,6 +277,7 @@ class Nasabah extends Model
         }
         return $return;
     }
+    */
     public function indexUser()
     {
         return $this->belongsTo(User::class, 'index_user');
@@ -306,5 +308,47 @@ class Nasabah extends Model
     public function provinsi()
     {
         return $this->belongsTo(Provinsi::class, 'provinsi_id');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        self::created(function ($model) {
+            Log::create([
+                'activity' => 'create',
+                'logable_type'  => 'nasabah',
+                'logable_id'    => $model->id,
+                'user_id'   => session('id'),
+                'description' => json_encode($model->toArray())
+            ]);
+        });
+        self::updated(function ($model) {
+            if($model->wasChanged('status')) { // status berubah
+                Log::create([
+                    'activity' => $model->status,
+                    'logable_type'  => 'nasabah',
+                    'logable_id'    => $model->id,
+                    'user_id'   => session('id'),
+                    'description' => json_encode($model->getChanges())
+                ]);
+            } else if($model->wasChanged('map')) { 
+                Log::create([
+                    'activity' => "map",
+                    'logable_type'  => 'nasabah',
+                    'logable_id'    => $model->id,
+                    'user_id'   => session('id'),
+                    'description' => json_encode($model->getChanges())
+                ]);
+            } else {
+                Log::create([
+                    'activity' => 'autosave',
+                    'logable_type'  => 'nasabah',
+                    'logable_id'    => $model->id,
+                    'user_id'   => session('id'),
+                    'description' => json_encode($model->getChanges())
+                ]);
+            }
+        });
     }
 }

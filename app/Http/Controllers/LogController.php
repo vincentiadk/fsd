@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Log;
+use App\Helper\Helper;
 
 class LogController extends Controller
 {
@@ -12,6 +13,7 @@ class LogController extends Controller
         $data = [
             'title' => 'Log Aktifitas',
             'content' => 'log',
+            'logs'  => Helper::getLogs(session('id'))
         ];
         return view('layout.index', ['data' => $data]);
     }
@@ -35,9 +37,12 @@ class LogController extends Controller
 
         $filtered = Log::where(function ($query) use ($search) {
             $query->where('activity', 'like', "%{$search}%")
-                ->orWhere('description', 'like', "%{$search}%");
+                ->orWhere('description', 'like', "%{$search}%")
+                ->orWhere('logable_type', 'like', "%{$search}%");
         });
-
+        if(session('role_id') != 1) {
+            $filtered->where('user_id', session('id'));
+        }
         $totalFiltered = $filtered->count();
         $queryData = $filtered->offset($start)
             ->limit($length)
@@ -51,7 +56,7 @@ class LogController extends Controller
                     $nomor,
                     $val->user->name,
                     $val->activity,
-                    $val->description,
+                    $val->description(),
                     $val->created_at,
                 ];
                 $nomor ++;

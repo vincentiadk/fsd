@@ -14,7 +14,8 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('template/dist/css/adminlte.min.css') }}">
     <link rel="stylesheet" href="{{ asset('template/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('template/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ asset('template/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('template/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
     <!-- jQuery -->
     <script src="{{ asset('template/plugins/jquery/jquery.min.js') }}"></script>
@@ -50,3 +51,140 @@
     <!-- AdminLTE for demo purposes -->
     <!--<script src="{{ asset('template/dist/js/demo.js') }}"></script>-->
 </head>
+<script>
+$('.select2').select2({
+    placeholder: '-- Pilih --'
+});
+bsCustomFileInput.init();
+
+function loadingOpen(selector) {
+    $(selector).waitMe({
+        effect: 'progressBar',
+        text: 'Mohon Tunggu ...',
+        bg: 'rgba(255,255,255,0.7)',
+        color: '#000'
+    });
+}
+
+function loadingClose(selector) {
+    $(selector).waitMe('hide');
+}
+
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'middle-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    onOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+})
+
+function refreshDropZone() {
+    var myDropzone = Dropzone.forElement("#dropzone");
+    myDropzone.removeAllFiles(true);
+    $('#keterangan_dropzone').html('');
+}
+
+function select2AutoSuggest(selector, endpoint, sourcepoint = '') {
+    $(selector).select2({
+        placeholder: '-- Pilih --',
+        minimumInputLength: 1,
+        allowClear: true,
+        cache: true,
+        ajax: {
+            url: '{{ url("admin/select2") }}' + '/' + endpoint,
+            type: 'POST',
+            dataType: 'JSON',
+            delay: 250,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: function(params) {
+                var query = {
+                    search: params.term,
+                    sourcepoint: $('#' + sourcepoint).val()
+                }
+                return query;
+            },
+            processResults: function(data) {
+                return {
+                    results: data.items
+                }
+            }
+        }
+    });
+}
+
+function select2AutoSuggestMultiple(selector, endpoint) {
+    $(selector).select2({
+        placeholder: '-- Pilih --',
+        minimumInputLength: 3,
+        allowClear: true,
+        multiple: true,
+        cache: true,
+        ajax: {
+            url: '{{ url("admin/select2") }}' + '/' + endpoint,
+            type: 'POST',
+            dataType: 'JSON',
+            delay: 250,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: function(params) {
+                return {
+                    search: params.term
+                };
+            },
+            processResults: function(data) {
+                return {
+                    results: data.items
+                }
+            }
+        }
+    });
+}
+
+function select2AutoSuggestTags(selector, endpoint) {
+    $(selector).select2({
+        placeholder: '-- Pilih --',
+        minimumInputLength: 3,
+        allowClear: true,
+        tags: true,
+        cache: true,
+        ajax: {
+            url: '{{ url("admin/select2") }}' + '/' + endpoint,
+            type: 'POST',
+            dataType: 'JSON',
+            delay: 250,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: function(params) {
+                return {
+                    search: params.term
+                };
+            },
+            processResults: function(data) {
+                return {
+                    results: data.items
+                }
+            }
+        },
+        createTag: function(params) {
+            var term = $.trim(params.term);
+            if (term === '') {
+                return null;
+            } else {
+                return {
+                    id: term,
+                    text: term,
+                    newTag: true
+                }
+            }
+        }
+    });
+}
+</script>

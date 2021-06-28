@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Nasabah;
 use App\Models\Log;
+use App\Helper\Helper;
 use Illuminate\Http\Request;
 
 class UploadController extends Controller
@@ -13,6 +14,7 @@ class UploadController extends Controller
         $data = [
             'title' => 'Upload Dokumen Nasabah (PDF)',
             'content' => 'upload',
+            'logs'  => Helper::getLogs(session('id'))
         ];
         return view('layout.index', ['data' => $data]);
     }
@@ -34,11 +36,6 @@ class UploadController extends Controller
                     'upload_user' => session('id'),
                     'status_time'  => now(),
                     'upload_time'  => now(),
-                ]);
-                Log::create([
-                    'user_id'       => session('id'),
-                    'activity'      => 'upload',
-                    'description'   => 'kosong -> baru'
                 ]);
                 $message = "Nasabah $no_rek sukses diupload";
             } else if($nasabah->status == 'baru') {
