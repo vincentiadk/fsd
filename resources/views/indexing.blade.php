@@ -18,7 +18,6 @@
 <form method="POST" action="{{ url('admin/nasabah/store') }}" id="form_data">
     @csrf
     <div class="content-wrapper kanban">
-
         @if($data['nasabah'] == [] )
         <section class="content">
             <div class="card">
@@ -209,6 +208,9 @@
                                     class="form-control" disabled>
                                 @else
                                 <select name="kabupaten_id" class="form-control" id="kabupaten_id">
+                                @if($data['nasabah']->kabupaten)
+                                <option value="{{ $data['nasabah']->kabupaten->id }}" selected>{{$data['nasabah']->kabupaten->name}}</option>
+                                @endif
                                 </select>
                                 @endif
                             </div>
@@ -226,6 +228,9 @@
                                     class="form-control" disabled>
                                 @else
                                 <select name="kecamatan_id" class="form-control" id="kecamatan_id">
+                                @if($data['nasabah']->kecamatan)
+                                <option value="{{ $data['nasabah']->kecamatan->id }}" selected>{{$data['nasabah']->kecamatan->name}}</option>
+                                @endif
                                 </select>
                                 @endif
                             </div>
@@ -243,6 +248,9 @@
                                     class="form-control" disabled>
                                 @else
                                 <select name="kelurahan_id" class="form-control" id="kelurahan_id">
+                                @if($data['nasabah']->kelurahan)
+                                <option value="{{ $data['nasabah']->kelurahan->id }}" selected>{{$data['nasabah']->kelurahan->name}}</option>
+                                @endif
                                 </select>
                                 @endif
                             </div>
@@ -285,9 +293,10 @@
                             <button class="btn btn-primary" type="submit" onclick="simpan()">Update</button>
                             @endif
                             @if(session("role_id") == 4)
-                            <input type='button' name="submit" class="btn btn-danger" onclick="simpan()" value="Tolak">
-                            <input type='button' name="submit" class="btn btn-warning" onclick="simpan()" value="Salah">
-                            <input type='button' name="submit" class="btn btn-success" onclick="simpan()" value="Benar">
+                            <input type="hidden" id="status" name="status">
+                            <input type='submit' class="btn btn-danger" onclick="simpan('tolak')" value="Tolak">
+                            <input type='submit' class="btn btn-warning" onclick="simpan('salah')" value="Salah">
+                            <input type='submit' class="btn btn-success" onclick="simpan('benar')" value="Benar">
                             @endif
                         </div>
                     </div>
@@ -319,7 +328,7 @@ var kk = {
     currentPage: 4,
     zoom: 1
 }
-pdfjsLib.getDocument('{{ $data["file"] }}').then((pdf) => {
+pdfjsLib.getDocument('{{ $data['file'] }}').then((pdf) => {
     qr.pdf = pdf;
     ktp.pdf = pdf;
     formulir.pdf = pdf;
@@ -390,8 +399,9 @@ function renderOnCanvas(canvas_name, state) {
 
 
 
-function simpan() {
+function simpan(qc = null) {
     event.preventDefault();
+    $('#status').val(qc);
     var formData = new FormData($('#form_data')[0]);
     $.ajax({
         url: '{{ url("admin/nasabah/store") }}',

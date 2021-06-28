@@ -34,6 +34,7 @@ Route::middleware('auth.admin.login')->group(function () {
         Route::get('nasabah/qc', 'NasabahController@qc');
         Route::get('nasabah/indexing', 'NasabahController@indexing');
         Route::post('nasabah/store', 'NasabahController@store');
+        Route::get('nasabah/stream_pdf/{id}', 'NasabahController@streamPdf');
 
         Route::get('report', 'ReportController@index');
         Route::post('report/datatable', 'ReportController@datatable');
@@ -47,6 +48,7 @@ Route::middleware('auth.admin.login')->group(function () {
         Route::post('select2/kabupaten', 'Select2Controller@getKabupaten');
         Route::post('select2/kecamatan', 'Select2Controller@getKecamatan');
         Route::post('select2/kelurahan', 'Select2Controller@getKelurahan');
+        Route::post('select2/map', 'Select2Controller@getMap');
 
         Route::get('upload', 'UploadController@index');
         Route::post('upload/store', 'UploadController@store');

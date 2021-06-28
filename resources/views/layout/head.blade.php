@@ -52,9 +52,7 @@
     <!--<script src="{{ asset('template/dist/js/demo.js') }}"></script>-->
 </head>
 <script>
-$('.select2').select2({
-    placeholder: '-- Pilih --'
-});
+
 bsCustomFileInput.init();
 
 function loadingOpen(selector) {

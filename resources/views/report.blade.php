@@ -102,6 +102,9 @@
     </section>
 </div>
 <script>
+    $('.select2').select2({
+    placeholder: '-- Pilih --'
+});
 function setTanggalLapor() {
     var ids = [];
     if ($('#set_lapor').val() == '') {

@@ -27,6 +27,7 @@ class NasabahController extends Controller
 
         if ($nasabah_salah) {
             $data['nasabah'] = $nasabah_salah;
+            $data['file'] = url("nasabah/$nasabah_salah->no_rek" . ".pdf");
         } else {
             $nasabah_index = Nasabah::where('status', 'indexing')
                 ->where('index_user', session('id'))
@@ -108,7 +109,7 @@ class NasabahController extends Controller
 
         if (session('role_id') == 4) {
             $nasabah->update([
-                'status' => strtolower(request('submit')),
+                'status' => request('status'),
                 'index_time'    => now()
             ]);
             $response = [
@@ -205,5 +206,19 @@ class NasabahController extends Controller
         }
 
         return view('layout.index', ['data' => $data]);
+    }
+
+    public function streamPdf($id)
+    {
+        $data = Nasabah::find($id);
+
+        if (File::exists(public_path("nasabah/$data->no_rek" . ".pdf"))) {
+            $file = public_path("nasabah/$data->no_rek" . ".pdf");
+        }
+
+        header('Content-type: application/octet-stream');
+        header('Content-disposition: attachment;filename=' . \Str::random(40) . '.pdf');
+
+        readfile($file);
     }
 }

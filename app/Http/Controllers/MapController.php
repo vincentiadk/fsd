@@ -17,7 +17,7 @@ class MapController extends Controller
             'content' => 'map',
             'logs' => Helper::getLogs(session('id')),
             'nasabah' => Nasabah::whereNull('map')
-                ->where('upload_user', session('id'))
+                ->whereNotIn('status', ['kosong'])
                 ->get(),
         ];
         return view('layout.index', ['data' => $data]);
@@ -25,12 +25,15 @@ class MapController extends Controller
 
     public function store()
     {
-        $nasabah = Nasabah::where('no_rek', request('no_rek'))->first();
-        if ($nasabah) {
-            $nasabah->update([
+        $nasabah = Nasabah::whereIn('no_rek', request('no_rek'))
+        ->update([
                 'map' => request('map'),
             ]);
-        }
-        return json()->response('success');
+        
+        $response = [
+            'status' => 200,
+            'message' => 'Berhasil menyimpan',
+        ];
+        return response()->json($response);
     }
 }
