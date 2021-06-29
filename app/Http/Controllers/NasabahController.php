@@ -212,7 +212,7 @@ class NasabahController extends Controller
     {
         $data = Nasabah::where('nama_file' , request('id'))->first();
         if($data) {
-            return Response::download(\Storage::path('nasabah/' . $file->filename), null, [
+            return response()->download(\Storage::path('nasabah/' . $file->filename), null, [
                 'Cache-Control' => 'no-cache, no-store, must-revalidate',
                 'Pragma' => 'no-cache',
                 'Expires' => '0',
