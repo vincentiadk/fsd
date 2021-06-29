@@ -18,6 +18,8 @@
                             </div>
                         </div>
                         <div class="card-body">
+                            <a href="/admin/user/view/0" class="btn btn-primary"> Tambah </a>
+                        </div>
                             <table class="table table-striped table-bordered nowrap" id="datatable_serverside" style="width:100%">
                                 <thead class="text-center">
                                     <tr>
