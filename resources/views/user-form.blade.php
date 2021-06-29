@@ -55,15 +55,15 @@
                     @if($data['type'] == 'setting')
                     <div class="form-group">
                         <label>Password Lama *)</label>
-                        <input type="password" class="form-control" name="password">
+                        <input type="password" class="form-control" name="password" id="password">
                     </div>
                     <div class="form-group">
                         <label>Password Baru *)</label>
-                        <input type="password" class="form-control" name="password_new">
+                        <input type="password" class="form-control" name="password_new" id="password_new">
                     </div>
                     <div class="form-group">
                         <label>Konfirmasi Password Baru *)</label>
-                        <input type="password" class="form-control" name="password_confirm">
+                        <input type="password" class="form-control" name="password_confirm" id="password_confirm">
                     </div>
                     *) Diisi hanya saat Anda ingin mengganti password
                     @endif
@@ -105,6 +105,11 @@ function simpan() {
                         icon: 'success',
                         title: response.message
                     });
+                    if($('#password').val() != '') {
+                        $('#password').val('');
+                        $('#password_new').val('');
+                        $('#password_confirm').val('');
+                    }
                 } else {
                     window.open("admin/user/view/" + response.id, "_self");
                 }

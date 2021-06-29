@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use App\Helper\Helper;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
     public function index()
     {
-        if(session('role_id') != 1 ) {
+        if (session('role_id') != 1) {
             return abort(403);
         }
         $data = [
@@ -87,7 +87,7 @@ class UserController extends Controller
 
     public function view($id)
     {
-        if(session('role_id') != 1 ) {
+        if (session('role_id') != 1) {
             return abort(403);
         }
         $data = [
@@ -128,11 +128,11 @@ class UserController extends Controller
             return preg_match('/^\S*$/u', $value);
         });
         $id = request('id');
-
+        $message = '';
         $validator = Validator::make(request()->all(), [
-            "name"      => "required",
-            "username"  => $id > 0 ? "required|without_spaces|min:6|unique:users,username," . $id : "required|without_spaces|min:6|unique:users,username",
-            "email"     => $id > 0 ? "required|email|unique:users,email," . $id: "required|email|unique:users,email",
+            "name" => "required",
+            "username" => $id > 0 ? "required|without_spaces|min:6|unique:users,username," . $id : "required|without_spaces|min:6|unique:users,username",
+            "email" => $id > 0 ? "required|email|unique:users,email," . $id : "required|email|unique:users,email",
         ], [
             "name.required" => "Nama wajib di isi!",
             "username.required" => "Username wajib di isi!",
@@ -146,51 +146,58 @@ class UserController extends Controller
         if ($validator->fails()) {
             $response = [
                 'status' => 422,
-                'error'  => $validator->errors()
+                'error' => $validator->errors(),
             ];
         } else {
             if (request('id') > 0) {
-                if(request('type') == 'update') {
+                if (request('type') == 'update') {
                     $user = User::findOrFail(request('id'));
                     $user->update([
-                            'name' => request('name'),
-                            'username' => request('username'),
-                            'email' => request('email'),
-                            'enable' => request('enable'),
-                            'role_id' => request('role_id'),
-                        ]);
+                        'name' => request('name'),
+                        'username' => request('username'),
+                        'email' => request('email'),
+                        'enable' => request('enable'),
+                        'role_id' => request('role_id'),
+                    ]);
+                    $message .= 'Berhasil menyimpan. ';
                     $response = [
                         'status' => 200,
-                        'message' => 'Berhasil menyimpan',
+                        'message' => $message,
                     ];
                 }
                 if (request('type') == 'setting') {
                     $user = User::findOrFail(request('id'));
                     $user->update([
-                            'name' => request('name'),
-                            'username' => request('username'),
-                            'email' => request('email'),
-                        ]);
+                        'name' => request('name'),
+                        'username' => request('username'),
+                        'email' => request('email'),
+                    ]);
+                    $message .= 'Berhasil menyimpan. ';
+                    $response = [
+                        'status' => 200,
+                        'message' => $message,
+                    ];
                     if (request('password') != "") {
                         if (Hash::check(request('password'), $user->password)) {
                             if (request('password_new') == request('password_confirm')) {
                                 $user->update([
                                     'password' => Hash::make(request('password_new')),
                                 ]);
+                                $message .= 'Berhasil ganti password. ';
                                 $response = [
                                     'status' => 200,
-                                    'message'  => 'Sukses!'
+                                    'message' => $message,
                                 ];
                             } else {
                                 $response = [
                                     'status' => 422,
-                                    'error'  => ['Konfirmasi password salah']
+                                    'error' => ['Konfirmasi password salah'],
                                 ];
                             }
                         } else {
                             $response = [
                                 'status' => 422,
-                                'error'  => ['Password lama salah']
+                                'error' => ['Password lama salah'],
                             ];
                         }
                     }
@@ -206,16 +213,16 @@ class UserController extends Controller
                 $response = [
                     'status' => 200,
                     'message' => 'Berhasil menyimpan',
-                    'id'    => $user->id
+                    'id' => $user->id,
                 ];
-            }  
+            }
         }
         return response()->json($response);
     }
 
     public function enable()
     {
-        if(session('role_id') != 1 ) {
+        if (session('role_id') != 1) {
             return abort(403);
         }
         User::where('id', request('id'))->update(['enable' => 1]);
@@ -228,7 +235,7 @@ class UserController extends Controller
 
     public function disable()
     {
-        if(session('role_id') != 1 ) {
+        if (session('role_id') != 1) {
             return abort(403);
         }
         User::where('id', request('id'))->update(['enable' => 0]);
