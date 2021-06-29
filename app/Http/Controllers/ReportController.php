@@ -53,8 +53,12 @@ class ReportController extends Controller
             foreach ($queryData as $val) {
                 $index_time = $val->index_time != null ? date('d-m-Y', strtotime($val->index_time)) : '';
                 $tanggal_lapor = $val->tanggal_lapor != null ? date('d-m-Y', strtotime($val->tanggal_lapor)) : '';
+                $checkbox = '';
+                if($val->status != 'benar' && $val->status != 'tuntas') {
+                    $checkbox = '<input type="checkbox" id="chkReport_' . $val->id . '" name="chkReport" value="' . $val->id . '">';
+                }
                 $response['data'][] = [
-                    '<input type="checkbox" id="chkReport_' . $val->id . '" name="chkReport" value="' . $val->id . '">
+                    $checkbox . '
                      <a href="/admin/nasabah/'.$val->id.'/view" class="btn btn-primary"> Detail </a>
                     ',
                     $val->cif,
