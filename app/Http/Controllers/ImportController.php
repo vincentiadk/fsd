@@ -42,7 +42,7 @@ class ImportController extends Controller
             return response()->json($response);
         } else {
             $nama_file = rand() . $file->getClientOriginalName();
-            $file->move('excel', $nama_file);
+            $file->move(\Storage::path('excel/'), $nama_file);
 
             $import = new NasabahImport;
             Excel::import($import, \Storage::path('excel/' . $nama_file));
