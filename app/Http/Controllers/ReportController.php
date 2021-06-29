@@ -54,7 +54,7 @@ class ReportController extends Controller
                 $index_time = $val->index_time != null ? date('d-m-Y', strtotime($val->index_time)) : '';
                 $tanggal_lapor = $val->tanggal_lapor != null ? date('d-m-Y', strtotime($val->tanggal_lapor)) : '';
                 $checkbox = '';
-                if($val->status != 'benar' && $val->status != 'tuntas') {
+                if($val->status == 'benar' || $val->status == 'tuntas') {
                     $checkbox = '<input type="checkbox" id="chkReport_' . $val->id . '" name="chkReport" value="' . $val->id . '">';
                 }
                 $response['data'][] = [
