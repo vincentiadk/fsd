@@ -145,7 +145,7 @@ function downloadExcel() {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             beforeSend: function() {
-                loadingOpen('content');
+                loadingOpen('.content');
             },
             data: {
                 tanggal_lapor: $('#tanggal_lapor').val(),
@@ -170,7 +170,7 @@ function downloadExcel() {
 
                 link.click();
                 document.body.removeChild(link);
-                loadingClose('content');
+                loadingClose('.content');
             }
         });
     }
