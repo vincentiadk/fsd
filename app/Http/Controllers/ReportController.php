@@ -92,7 +92,7 @@ class ReportController extends Controller
         Log::create([
             'user_id' => session('id'),
             'activity' => 'export',
-            'description' => $filename,
+            'description' => json_encode(['nama file' => $filename ]),
         ]);
         return Excel::download(new NasabahExport($data), $filename);
     }
