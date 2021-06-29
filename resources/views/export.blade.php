@@ -228,7 +228,7 @@
                 {{ $d->nama }}
             </td>
             <td style="font-size:9px; border:1px solid black; text-align:center; vertical-align:center;">
-                {{ $d->jenis_kelamin . ": " . $d->jenis_kelamin() }}
+                {{ $d->jenis_kelamin }}
             </td>
             <td style="font-size:9px; border:1px solid black; text-align:center; vertical-align:center;">
                 {{ $d->kebangsaan }}
