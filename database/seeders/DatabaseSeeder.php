@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CitiesSeeder::class);
         $this->call(DistrictsSeeder::class);
         $this->call(VillagesSeeder::class);
-        File::cleanDirectory(public_path('nasabah'));
+        File::cleanDirectory(\Storage::path('nasabah'));
         File::cleanDirectory(public_path('excel'));
     }
 

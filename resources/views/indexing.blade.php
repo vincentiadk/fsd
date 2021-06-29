@@ -119,6 +119,7 @@
                 @endif
                 <div class="card card-row card-secondary">
                     <input type="hidden" name="id_nasabah" value="{{ $data['nasabah']->id }}">
+                    <input type="hidden" id="stream_pdf" value="{{ url('admin/nasabah/stream_pdf?id='. $data['nasabah']->nama_file ) }}">
                     <div class="card-header">
                         <span> CIF number : {{ $data['nasabah']->cif }} </span>
                         <span style="float:right"> No Rekening : {{ $data['nasabah']->no_rek }}</span>
@@ -328,7 +329,7 @@ var kk = {
     currentPage: 4,
     zoom: 1
 }
-pdfjsLib.getDocument('{{ $data['file'] }}').then((pdf) => {
+pdfjsLib.getDocument($('#stream_pdf').val()).then((pdf) => {
     qr.pdf = pdf;
     ktp.pdf = pdf;
     formulir.pdf = pdf;

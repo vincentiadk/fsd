@@ -173,6 +173,7 @@ class CreateNasabahTable extends Migration
             $table->timestamp('tanggal_lapor')->nullable();
             $table->string('map')->nullable();
             $table->string('email')->unique()->nullable();
+            $table->string('nama_file')->nullable();
             $table->timestamps();
         });
     }

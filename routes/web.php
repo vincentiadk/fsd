@@ -34,7 +34,7 @@ Route::middleware('auth.admin.login')->group(function () {
         Route::get('nasabah/qc', 'NasabahController@qc');
         Route::get('nasabah/indexing', 'NasabahController@indexing');
         Route::post('nasabah/store', 'NasabahController@store');
-        Route::get('nasabah/stream_pdf/{id}', 'NasabahController@streamPdf');
+        Route::get('nasabah/stream_pdf', 'NasabahController@streamPdf');
 
         Route::get('report', 'ReportController@index');
         Route::post('report/datatable', 'ReportController@datatable');

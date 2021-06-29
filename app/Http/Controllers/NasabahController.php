@@ -27,14 +27,14 @@ class NasabahController extends Controller
 
         if ($nasabah_salah) {
             $data['nasabah'] = $nasabah_salah;
-            $data['file'] = url("nasabah/$nasabah_salah->no_rek" . ".pdf");
+            $data['file'] = $nasabah_salah->nama_file;
         } else {
             $nasabah_index = Nasabah::where('status', 'indexing')
                 ->where('index_user', session('id'))
                 ->first();
             if ($nasabah_index) {
                 $data['nasabah'] = $nasabah_index;
-                $data['file'] = url("nasabah/$nasabah_index->no_rek" . ".pdf");
+                $data['file'] = $nasabah_index->nama_file != "" ? "true" : "";
             } else {
                 $nasabah_baru = Nasabah::where('status', 'baru')
                     ->first();
@@ -46,7 +46,7 @@ class NasabahController extends Controller
                         'status_time' => now(),
                     ]);
                     $data['nasabah'] = $nasabah_baru;
-                    $data['file'] = url("nasabah/$nasabah_baru->no_rek" . ".pdf");
+                    $data['file'] = $nasabah_baru->nama_file != "" ? "true" : '';
                 } else {
                     $data['nasabah'] = [];
                 }
@@ -73,14 +73,14 @@ class NasabahController extends Controller
         ];
         if ($nasabah_qc) {
             $data['nasabah'] = $nasabah_qc;
-            $data['file'] = url("nasabah/$nasabah_qc->no_rek" . ".pdf");
+            $data['file'] = $nasabah_qc->nama_file != "" ? "true" : "";
         } else {
             $nasabah_update = Nasabah::where('status', 'update')
                 ->where('qc_user', session('id'))
                 ->first();
             if ($nasabah_update) {
                 $data['nasabah'] = $nasabah_update;
-                $data['file'] = url("nasabah/$nasabah_update->no_rek" . ".pdf");
+                $data['file'] = $nasabah_update->nama_file != "" ? "true" : "";
             } else {
                 $nasabah_update_new = Nasabah::where('status', 'update')
                     ->whereNull('qc_user')
@@ -93,7 +93,7 @@ class NasabahController extends Controller
                         'status_time' => now(),
                     ]);
                     $data['nasabah'] = $nasabah_update_new;
-                    $data['file'] = url("nasabah/$nasabah_update_new->no_rek" . ".pdf");
+                    $data['file'] = $nasabah_update_new->nama_file != "" ? "true" : "";
                 } else {
                     $data['nasabah'] = [];
                 }
@@ -105,7 +105,7 @@ class NasabahController extends Controller
     public function store()
     {
         $id = request('id_nasabah');
-        $nasabah = Nasabah::find($id);
+        $nasabah = Nasabah::findOrFail($id);
 
         if (session('role_id') == 4) {
             $nasabah->update([
@@ -198,27 +198,27 @@ class NasabahController extends Controller
             'file' => '',
             'logs' => Helper::getLogs(session('id')),
         ];
-        $nasabah = Nasabah::find($id);
+        $nasabah = Nasabah::findOrFail($id);
         $data['nasabah'] = $nasabah;
 
-        if (File::exists(public_path("nasabah/$nasabah->no_rek" . ".pdf"))) {
-            $data['file'] = url("nasabah/$nasabah->no_rek" . ".pdf");
+        if (File::exists(\Storage::path('nasabah/' . $nasabah->nama_file))) {
+            $data['file'] = $nasabah->nama_file;
         }
 
         return view('layout.index', ['data' => $data]);
     }
 
-    public function streamPdf($id)
+    public function streamPdf()
     {
-        $data = Nasabah::find($id);
-
-        if (File::exists(public_path("nasabah/$data->no_rek" . ".pdf"))) {
-            $file = public_path("nasabah/$data->no_rek" . ".pdf");
+        $data = Nasabah::where('nama_file' , request('id'))->first();
+        if($data) {
+            return Response::download(\Storage::path('nasabah/' . $file->filename), null, [
+                'Cache-Control' => 'no-cache, no-store, must-revalidate',
+                'Pragma' => 'no-cache',
+                'Expires' => '0',
+            ], null);
+        } else {
+            return abort(404);
         }
-
-        header('Content-type: application/octet-stream');
-        header('Content-disposition: attachment;filename=' . \Str::random(40) . '.pdf');
-
-        readfile($file);
     }
 }

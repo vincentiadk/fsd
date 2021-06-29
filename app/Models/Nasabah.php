@@ -85,7 +85,8 @@ class Nasabah extends Model
         'simpan_time',
         'tanggal_lapor',
         'map',
-        'email'
+        'email',
+        'nama_file'
     ];
 
     /*public function risiko()
