@@ -26,7 +26,7 @@ class NasabahImport implements ToCollection, WithStartRow
                     $provinsi_id = $provinsi->id;
                 }
 
-                $kab = Kabupaten::where('name', 'LIKE', str_replace(['KOTA ','ADM. '], '', $row[27]))
+                $kab = Kabupaten::where('name', 'LIKE', $row[27])
                     ->where('provinsi_id', $provinsi_id)
                     ->first();
                 $kab_id = null;

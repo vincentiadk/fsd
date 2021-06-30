@@ -43,11 +43,13 @@
         </section>
         @else
         <!-- Main content -->
+        <section>
+        <div class="alert alert-danger" id="validasi_element" style="display:none;">
+                <ul id="validasi_content">tes</ul>
+            </div>
+        </section>
         <section class="content pb-3">
             <div class="container-fluid h-100">
-                <div class="alert alert-danger" id="validasi_element" style="display:none;">
-                    <ul id="validasi_content"></ul>
-                </div>
                 @if($data['file'] == '')
                 <div class="card card-row card-primary card-tabs" style="width:700px">
                     <div class=" card-header">
@@ -451,7 +453,7 @@ function simpan(qc = null) {
         success: function(response) {
             loadingClose('.content');
             if (response.status == 200) {
-                window.open('{{ url("/admin/nasabah/") }}' + response.page, '_self');
+                window.open('{{ url("/admin/nasabah/") }}' + '/' + response.page, '_self');
             } else if (response.status == 422) {
                 $('#validasi_element').show();
                 Toast.fire({

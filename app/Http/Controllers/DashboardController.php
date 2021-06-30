@@ -71,8 +71,12 @@ class DashboardController extends Controller
         $search = $request->input('search.value');
 
         $filtered = Nasabah::selectRaw("COUNT(*) id, DATE_FORMAT(status_time, '%Y-%m-%d') as period")
-            ->whereNotNull('status_time')
-            ->groupBy(\DB::raw("DATE_FORMAT(status_time, '%Y-%m-%d')"));
+            ->whereNotNull('status_time')    ;
+        if(session('id') == '3') { //opt index
+            $filtered->where('index_user', session('id'));
+        }
+
+        $filtered->groupBy(\DB::raw("DATE_FORMAT(status_time, '%Y-%m-%d')"));
         $totalData = $filtered->count();
 
         $queryData = $filtered->offset($start)
