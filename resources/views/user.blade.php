@@ -135,9 +135,12 @@ function enableUser(id) {
 
 function getUser(id, type) {
     $.ajax({
-        url: '{{ url("admin/select2/user") }}' + '/?id=' + id,
+        url: '{{ url("admin/select2/user") }}'
         type: 'POST',
         dataType: 'JSON',
+        data : {
+            id : id
+        },
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
