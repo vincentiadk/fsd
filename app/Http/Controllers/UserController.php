@@ -57,9 +57,9 @@ class UserController extends Controller
             foreach ($queryData as $val) {
                 $aksi = "";
                 if ($val->enable == 1) {
-                    $aksi .= "<button class='btn btn-danger' onclick='disable($val->id)'>Disable</button>";
+                    $aksi .= "<button class='btn btn-danger' onclick='disableUser($val->id)'>Disable</button>";
                 } else {
-                    $aksi .= "<button class='btn btn-primary' onclick='enable($val->id)'>Enable</button>";
+                    $aksi .= "<button class='btn btn-primary' onclick='enableUser($val->id)'>Enable</button>";
                 }
                 $response['data'][] = [
                     $nomor,

@@ -53,6 +53,7 @@ Route::middleware('auth.admin.login')->group(function () {
         Route::post('select2/kecamatan', 'Select2Controller@getKecamatan');
         Route::post('select2/kelurahan', 'Select2Controller@getKelurahan');
         Route::post('select2/map', 'Select2Controller@getMap');
+        Route::post('select2/user', 'Select2Controller@getUser');
 
         Route::get('upload', 'UploadController@index');
         Route::post('upload/store', 'UploadController@store');
@@ -62,6 +63,9 @@ Route::middleware('auth.admin.login')->group(function () {
         Route::post('user/store', 'UserController@store');
         Route::get('user/view/{id}', 'UserController@view');
         Route::get('user/setting', 'UserController@setting');
+        Route::post('user/enable', 'UserController@enable');
+        Route::post('user/disable', 'UserController@disable');
+
 
         Route::get('provinsi', 'ProvinsiController@index');
         Route::post('provinsi/datatable', 'ProvinsiController@datatable');

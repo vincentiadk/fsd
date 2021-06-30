@@ -7,6 +7,7 @@ use App\Models\Kecamatan;
 use App\Models\Kelurahan;
 use App\Models\Nasabah;
 use App\Models\Provinsi;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class Select2Controller extends Controller
@@ -118,5 +119,10 @@ class Select2Controller extends Controller
         return Nasabah::where('map', request('map'))
             ->orderBy('no_rek', 'asc')
             ->get();
+    }
+
+    public function getUser()
+    {
+        return User::findOrFail(request('id'));
     }
 }
