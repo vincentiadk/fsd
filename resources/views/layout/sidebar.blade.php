@@ -36,6 +36,14 @@
                       </a>
                   </li>
                   <li class="nav-item">
+                      <a href="/admin/performance" class="nav-link">
+                          <i class="nav-icon fas fa-columns"></i>
+                          <p>
+                              Kinerja User
+                          </p>
+                      </a>
+                  </li>
+                  <li class="nav-item">
                       <a href="/admin/import" class="nav-link">
                           <i class="nav-icon fas fa-database"></i>
                           <p>

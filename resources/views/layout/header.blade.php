@@ -16,6 +16,9 @@
                     <a href="/admin/report" class="nav-link">Reporting</a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
+                    <a href="/admin/performance" class="nav-link">Kinerja User</a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
                     <a href="/admin/import" class="nav-link">Import DB</a>
                 </li>
                 @endif
