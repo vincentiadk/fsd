@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\NasabahExport;
+use App\Exports\ExportToView;
 use App\Models\Log;
 use App\Models\Nasabah;
 use App\Helper\Helper;
@@ -91,14 +91,15 @@ class ReportController extends Controller
 
     public function export(Request $request)
     {
-        $data = $this->getFiltered($request);
+        $data['data'] = $this->getFiltered($request);
+        $data['view'] = 'export';
         $filename = rand() . '_report.xlsx';
         Log::create([
             'user_id' => session('id'),
             'activity' => 'export',
             'description' => json_encode(['nama file' => $filename ]),
         ]);
-        return Excel::download(new NasabahExport($data), $filename);
+        return Excel::download(new ExportToView($data), $filename);
     }
 
     public function getFiltered($request)

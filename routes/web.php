@@ -38,6 +38,7 @@ Route::middleware('auth.admin.login')->group(function () {
 
         Route::get('performance', 'PerformanceController@index');
         Route::post('performance/datatable', 'PerformanceController@datatable');
+        Route::post('performance/export', 'PerformanceController@export');
 
         Route::get('report', 'ReportController@index');
         Route::post('report/datatable', 'ReportController@datatable');

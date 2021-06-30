@@ -9,6 +9,7 @@
                 <h3 class="card-title">{{ $title }}</h3>
             </div>
             <div class="card-body">
+                <button onclick="downloadExcel()" class="btn btn-primary"> Export Data </button>
                 <table class="table table-striped table-bordered display nowrap" id="datatable_serverside">
                     <thead class="text-center">
                         <tr>
@@ -84,4 +85,40 @@ var oTable = $('#datatable_serverside').DataTable({
         },
     ]
 });
+function downloadExcel() {
+    $.ajax({
+            xhrFields: {
+                responseType: 'blob',
+            },
+            url: '{{ url("admin/performance/export") }}',
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            beforeSend: function() {
+                loadingOpen('.content');
+            },
+            data: {
+            },
+            success: function(result, status, xhr) {
+                var disposition = xhr.getResponseHeader('content-disposition');
+                var matches = /"([^"]*)"/.exec(disposition);
+                var filename = (matches != null && matches[1] ? matches[1] : 'performance'+ (Math.floor(Math.random() * 90000) + 10000)+'.xlsx');
+
+                // The actual download
+                var blob = new Blob([result], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                });
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = filename;
+
+                document.body.appendChild(link);
+
+                link.click();
+                document.body.removeChild(link);
+                loadingClose('.content');
+            }
+        });
+    }
 </script>

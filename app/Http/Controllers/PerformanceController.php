@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Exports\ExportToView;
 use App\Helper\Helper;
 use App\Models\User;
 use App\Models\NasabahStatusIndex;
+use App\Models\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PerformanceController extends Controller
 {
@@ -31,21 +34,21 @@ class PerformanceController extends Controller
             'name',
             'latitude',
             'longitude',
+            'name',
+            'latitude',
+            'longitude',
+            'name',
         ];
 
         $start = $request->input('start');
         $length = $request->input('length');
         $order = $whereLike[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
-        $search = $request->input('search.value');
         $totalData = User::count();
 
-        $filtered = User::where(function ($query) use ($search) {
-                $query->where('name', 'like', "%{$search}%")
-                    ->orWhere('username', 'like', "%{$search}%");
-            });
-
+        $filtered = $this->getFiltered($request);
         $totalFiltered = $filtered->count();
+
         $queryData = $filtered->offset($start)
             ->limit($length)
             ->orderBy($order, $dir)
@@ -102,4 +105,29 @@ class PerformanceController extends Controller
         }
         return response()->json($response);
     }
+
+    public function getFiltered($request)
+    {
+        $search = $request->input('search.value');
+
+        $filtered = User::where(function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('username', 'like', "%{$search}%");
+            });
+        return $filtered;
+    }
+
+    public function export(Request $request)
+    {
+        $data['data'] = $this->getFiltered($request);
+        $data['view'] = 'export-performance';
+        $filename = rand() . '_performance-report.xlsx';
+        Log::create([
+            'user_id' => session('id'),
+            'activity' => 'export performance',
+            'description' => json_encode(['nama file' => $filename ]),
+        ]);
+        return Excel::download(new ExportToView($data), $filename);
+    }
+
 }

@@ -11,6 +11,9 @@ class UploadController extends Controller
 {
     public function index()
     {
+        if(session('role_id') != 2 ) {
+            return abort(403);
+        }
         $data = [
             'title' => 'Upload Dokumen Nasabah (PDF)',
             'content' => 'upload',
