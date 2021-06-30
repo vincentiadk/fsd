@@ -19,6 +19,10 @@ class AuthAdminLogin
     public function handle(Request $request, Closure $next)
     {
         if(session()->has('id')) {
+            if(session()->get('last_login') != User::find(session()->get('id'))->last_login) {
+                session()->flush();
+                return redirect('/login');
+            }
             return $next($request);
         }
 

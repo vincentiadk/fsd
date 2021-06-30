@@ -21,13 +21,18 @@ class AuthController extends Controller
                 
                 if ($query->count() > 0) {
                     if (Hash::check($password, $query->first()->password)) {
+                        $user = $query->first();
+                        $time = now();
                         session([
-                            'id' => $query->first()->id,
-                            'username' => $query->first()->username,
-                            'role_id' => $query->first()->role_id,
-                            'email' => $query->first()->email,
-                            'name'  => $query->first()->name,
-                            'last_login' => now()
+                            'id' => $user->id,
+                            'username' => $user->username,
+                            'role_id' => $user->role_id,
+                            'email' => $user->email,
+                            'name'  => $user->name,
+                            'last_login' => $time
+                        ]);
+                        $user->update([
+                            'last_login'=> $time
                         ]);
                         Log::create([
                             'user_id'   => session('id'),

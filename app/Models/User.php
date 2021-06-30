@@ -23,6 +23,7 @@ class User extends Authenticatable
         'role_id',
         'email_verified_at',
         'username',
+        'last_login'
     ];
 
     /**
@@ -94,6 +95,8 @@ class User extends Authenticatable
                     'logable_id'    => $model->id,
                     'user_id'   => session('id'),
                 ]);
+            } else if($model->wasChanged('last_login')) {
+
             } else {
                 Log::create([
                     'activity' => 'update',
