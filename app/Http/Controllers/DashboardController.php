@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Nasabah;
 use App\Helper\Helper;
+use App\Models\Nasabah;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -70,31 +70,40 @@ class DashboardController extends Controller
         $dir = $request->input('order.0.dir');
         $search = $request->input('search.value');
 
-        $totalData = Nasabah::count();
+        $filtered = Nasabah::selectRaw("COUNT(*) id, DATE_FORMAT(status_time, '%Y-%m-%d') as period")
+            ->whereNotNull('status_time')
+            ->groupBy(\DB::raw("DATE_FORMAT(status_time, '%Y-%m-%d')"));
+        $totalData = $filtered->count();
+
+        $queryData = $filtered->offset($start)
+            ->limit($length)
+            ->orderBy($order, $dir)
+            ->get();
+
         $response['data'] = [];
-        for ($i = $start; $i < $length; $i++) {
-            $dateHuman = \Carbon\Carbon::now()->subDays($i)->format('Y M d');
-            $date = \Carbon\Carbon::now()->subDays($i)->format('Y-m-d');
+        foreach ($queryData as $val) {
+            $date = $val->period;
             $response['data'][] = [
-                $dateHuman,
-                Nasabah::where(function($query) use ($date) {
+                $val->period,
+                Nasabah::where(function ($query) use ($date) {
                     $query->where('status', 'update')
-                    ->orWhere('status', 'indexing');
+                        ->orWhere('status', 'indexing');
                 })->whereDate('index_time', $date)->count(),
                 Nasabah::where('status', 'benar')->whereDate('index_time', $date)->count(),
                 Nasabah::where('status', 'salah')->whereDate('index_time', $date)->count(),
                 Nasabah::where('status', 'tolak')->whereDate('index_time', $date)->count(),
-                Nasabah::where('status', 'baru')->whereDate('updated_at', $date)->count(),
+                Nasabah::where('status', 'baru')->whereDate('status_time', $date)->count(),
             ];
         }
-
         $response['recordsTotal'] = 0;
         if ($totalData != false) {
             $response['recordsTotal'] = $totalData;
         }
 
         $response['recordsFiltered'] = 0;
-        $response['recordsFiltered'] = $totalData;
+        if ($totalData != false) {
+            $response['recordsFiltered'] = $totalData;
+        }
 
         return response()->json($response);
     }
@@ -112,14 +121,23 @@ class DashboardController extends Controller
         $dir = $request->input('order.0.dir');
         $search = $request->input('search.value');
 
-        $totalData = Nasabah::count();
+        $filtered = Nasabah::selectRaw("COUNT(*) id, DATE_FORMAT(tanggal_lapor, '%Y-%m-%d') as period")
+            ->whereNotNull('tanggal_lapor')
+            ->where('status', 'tuntas')
+            ->groupBy(\DB::raw("DATE_FORMAT(tanggal_lapor, '%Y-%m-%d')"));
+
+        $totalData = $filtered->count();
+        $queryData = $filtered->offset($start)
+            ->limit($length)
+            ->orderBy($order, $dir)
+            ->get();
+
         $response['data'] = [];
-        for ($i = $start; $i < $length; $i++) {
-            $dateHuman = \Carbon\Carbon::now()->subDays($i)->format('Y M d');
-            $date = \Carbon\Carbon::now()->subDays($i)->format('Y-m-d');
+        foreach ($queryData as $val) {
+            $date = $val->period;
             $response['data'][] = [
-                $dateHuman,
-                Nasabah::where('status', 'benar')->whereDate('tanggal_lapor', $date)->count(),
+                $date,
+                Nasabah::where('status', 'tuntas')->whereDate('tanggal_lapor', $date)->count(),
             ];
         }
 
@@ -149,13 +167,23 @@ class DashboardController extends Controller
         $dir = $request->input('order.0.dir');
         $search = $request->input('search.value');
 
-        $totalData = Nasabah::count();
+        $filtered = Nasabah::selectRaw("COUNT(*) id, DATE_FORMAT(upload_time, '%Y-%m-%d') as period")
+            ->whereNotNull('upload_time')
+            ->where('upload_user', session('id'))
+            ->groupBy(\DB::raw("DATE_FORMAT(upload_time, '%Y-%m-%d')"));
+
+        $totalData = $filtered->count();
+
+        $queryData = $filtered->offset($start)
+            ->limit($length)
+            ->orderBy($order, $dir)
+            ->get();
+
         $response['data'] = [];
-        for ($i = $start; $i < $length; $i++) {
-            $dateHuman = \Carbon\Carbon::now()->subDays($i)->format('Y M d');
-            $date = \Carbon\Carbon::now()->subDays($i)->format('Y-m-d');
+        foreach ($queryData as $val) {
+            $date = $val->period;
             $response['data'][] = [
-                $dateHuman,
+                $date,
                 Nasabah::where('upload_user', session('id'))->whereDate('upload_time', $date)->count(),
             ];
         }
