@@ -10,6 +10,9 @@ class ProvinsiController extends Controller
 {
     public function index()
     {
+        if (session('role_id') != 1) {
+            return abort(403);
+        }
         if(session('role_id') != 1 ) {
             return abort(403);
         }
