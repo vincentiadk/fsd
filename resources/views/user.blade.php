@@ -135,7 +135,7 @@ function enableUser(id) {
 
 function getUser(id, type) {
     $.ajax({
-        url: '{{ url("admin/select2/user") }}'
+        url: '{{ url("admin/select2/user") }}',
         type: 'POST',
         dataType: 'JSON',
         data : {
