@@ -11,6 +11,16 @@
 .content-wrapper.kanban .card.card-row {
     width: 500px;
 }
+
+.zoom-container {
+    position: relative;
+}
+
+.zoom-controls {
+    position: absolute;
+    right: 0px;
+    opacity: 0.8;
+}
 </style>
 <!-- Content Wrapper. Contains page content -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.943/pdf.min.js">
@@ -77,40 +87,50 @@
                     <div class="card-body">
                         <div class="tab-content" id="custom-tabs-two-tabContent">
                             <div class="tab-pane fade show active" id="qr" role="tabpanel" aria-labelledby="qr-tab">
+                                <div class="zoom-container">
+                                    <div class="zoom-controls">
+                                        <button class="btn btn-primary" onclick="zoomIn('pdf_qr')">+</button>
+                                        <button class="btn btn-primary" onclick="zoomOut('pdf_qr')">-</button>
+                                    </div>
+                                </div>
                                 <div id="canvas_container">
                                     <canvas id="pdf_qr"></canvas>
                                 </div>
-                                <div id="zoom_controls">
-                                    <button class="btn btn-secondary" onclick="zoomIn('pdf_qr')">+</button>
-                                    <button class="btn btn-secondary" onclick="zoomOut('pdf_qr')">-</button>
-                                </div>
+
                             </div>
                             <div class="tab-pane fade" id="ktp" role="tabpanel" aria-labelledby="ktp-tab">
+                                <div class="zoom-container">
+                                    <div class="zoom-controls">
+                                        <button class="btn btn-primary" onclick="zoomIn('pdf_ktp')">+</button>
+                                        <button class="btn btn-primary" onclick="zoomOut('pdf_ktp')">-</button>
+                                    </div>
+                                </div>
                                 <div id="canvas_container">
                                     <canvas id="pdf_ktp"></canvas>
                                 </div>
-                                <div id="zoom_controls">
-                                    <button class="btn btn-secondary" onclick="zoomIn('pdf_ktp')">+</button>
-                                    <button class="btn btn-secondary" onclick="zoomOut('pdf_ktp')">-</button>
-                                </div>
                             </div>
                             <div class="tab-pane fade" id="formulir" role="tabpanel" aria-labelledby="formulir-tab">
+                                <div class="zoom-container">
+                                    <div class="zoom-controls">
+                                        <button class="btn btn-primary" onclick="zoomIn('pdf_formulir')">+</button>
+                                        <button class="btn btn-primary" onclick="zoomOut('pdf_formulir')">-</button>
+                                    </div>
+                                </div>
                                 <div id="canvas_container">
                                     <canvas id="pdf_formulir"></canvas>
                                 </div>
-                                <div id="zoom_controls">
-                                    <button class="btn btn-secondary" onclick="zoomIn('pdf_formulir')">+</button>
-                                    <button class="btn btn-secondary" onclick="zoomOut('pdf_formulir')">-</button>
-                                </div>
                             </div>
                             <div class="tab-pane fade" id="kk" role="tabpanel" aria-labelledby="kk-tab">
+                                <div class="zoom-container">
+                                    <div class="zoom-controls">
+                                        <button class="btn btn-primary" onclick="zoomIn('pdf_kk')">+</button>
+                                        <button class="btn btn-primary" onclick="zoomOut('pdf_kkk')">-</button>
+                                    </div>
+                                </div>
                                 <div id="canvas_container">
                                     <canvas id="pdf_kk"></canvas>
                                 </div>
-                                <div id="zoom_controls">
-                                    <button class="btn btn-secondary" onclick="zoomIn('pdf_kk')">+</button>
-                                    <button class="btn btn-secondary" onclick="zoomOut('pdf_kk')">-</button>
-                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -119,7 +139,8 @@
                 @endif
                 <div class="card card-row card-secondary">
                     <input type="hidden" name="id_nasabah" value="{{ $data['nasabah']->id }}">
-                    <input type="hidden" id="stream_pdf" value="{{ url('admin/nasabah/stream_pdf?id='. $data['nasabah']->nama_file ) }}">
+                    <input type="hidden" id="stream_pdf"
+                        value="{{ url('admin/nasabah/stream_pdf?id='. $data['nasabah']->nama_file ) }}">
                     <div class="card-header">
                         <span> CIF number : {{ $data['nasabah']->cif }} </span>
                         <span style="float:right"> No Rekening : {{ $data['nasabah']->no_rek }}</span>
@@ -209,9 +230,10 @@
                                     class="form-control" disabled>
                                 @else
                                 <select name="kabupaten_id" class="form-control" id="kabupaten_id">
-                                @if($data['nasabah']->kabupaten)
-                                <option value="{{ $data['nasabah']->kabupaten->id }}" selected>{{$data['nasabah']->kabupaten->name}}</option>
-                                @endif
+                                    @if($data['nasabah']->kabupaten)
+                                    <option value="{{ $data['nasabah']->kabupaten->id }}" selected>
+                                        {{$data['nasabah']->kabupaten->name}}</option>
+                                    @endif
                                 </select>
                                 @endif
                             </div>
@@ -229,9 +251,10 @@
                                     class="form-control" disabled>
                                 @else
                                 <select name="kecamatan_id" class="form-control" id="kecamatan_id">
-                                @if($data['nasabah']->kecamatan)
-                                <option value="{{ $data['nasabah']->kecamatan->id }}" selected>{{$data['nasabah']->kecamatan->name}}</option>
-                                @endif
+                                    @if($data['nasabah']->kecamatan)
+                                    <option value="{{ $data['nasabah']->kecamatan->id }}" selected>
+                                        {{$data['nasabah']->kecamatan->name}}</option>
+                                    @endif
                                 </select>
                                 @endif
                             </div>
@@ -249,9 +272,10 @@
                                     class="form-control" disabled>
                                 @else
                                 <select name="kelurahan_id" class="form-control" id="kelurahan_id">
-                                @if($data['nasabah']->kelurahan)
-                                <option value="{{ $data['nasabah']->kelurahan->id }}" selected>{{$data['nasabah']->kelurahan->name}}</option>
-                                @endif
+                                    @if($data['nasabah']->kelurahan)
+                                    <option value="{{ $data['nasabah']->kelurahan->id }}" selected>
+                                        {{$data['nasabah']->kelurahan->name}}</option>
+                                    @endif
                                 </select>
                                 @endif
                             </div>
@@ -398,6 +422,10 @@ function renderOnCanvas(canvas_name, state) {
     });
 }
 
+$('canvas').on('contextmenu', function() {
+    event.preventDefault();
+    return false;
+});
 
 
 function simpan(qc = null) {
@@ -423,7 +451,7 @@ function simpan(qc = null) {
         success: function(response) {
             loadingClose('.content');
             if (response.status == 200) {
-                window.open('{{ url('') }}' + "/admin/nasabah/" + response.page, "_self");
+                window.open('{{ url("/admin/nasabah/") }}' + response.page, '_self');
             } else if (response.status == 422) {
                 $('#validasi_element').show();
                 Toast.fire({
