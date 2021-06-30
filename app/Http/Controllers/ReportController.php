@@ -17,7 +17,7 @@ class ReportController extends Controller
             return abort(403);
         }
         $data = [
-            'title' => 'Reporting',
+            'title' => 'Report Nasabah',
             'content' => 'report',
             'logs'  => Helper::getLogs(session('id'))
         ];

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\NasabahStatusIndex;
 
 class Nasabah extends Model
 {
@@ -327,12 +328,31 @@ class Nasabah extends Model
         self::updated(function ($model) {
             if($model->wasChanged('status')) { // status berubah
                 Log::create([
-                    'activity' => $model->status,
+                    'activity'      => $model->status,
                     'logable_type'  => 'nasabah',
                     'logable_id'    => $model->id,
-                    'user_id'   => session('id'),
-                    'description' => json_encode($model->getChanges())
+                    'user_id'       => session('id'),
+                    'description'   => json_encode($model->getChanges())
                 ]);
+                if($model->status == 'baru') {
+                    NasabahStatusIndex::create([
+                        'user_id'       => $model->upload_user,
+                        'nasabah_id'    => $model->id,
+                        'status'        => $model->status
+                    ]);
+                } else if ($model->status == 'qc') {
+                    NasabahStatusIndex::create([
+                        'user_id'       => $model->qc_user,
+                        'nasabah_id'    => $model->id,
+                        'status'        => $model->status
+                    ]);
+                } else { // salah, benar, tolak, tuntas, indexing
+                    NasabahStatusIndex::create([
+                        'user_id'       => $model->index_user,
+                        'nasabah_id'    => $model->id,
+                        'status'        => $model->status
+                    ]);
+                }
             } else if($model->wasChanged('map')) { 
                 Log::create([
                     'activity' => "map",

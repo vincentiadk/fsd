@@ -36,6 +36,9 @@ Route::middleware('auth.admin.login')->group(function () {
         Route::post('nasabah/store', 'NasabahController@store');
         Route::get('nasabah/stream_pdf', 'NasabahController@streamPdf');
 
+        Route::get('performance', 'PerformanceController@index');
+        Route::post('performance/datatable', 'PerformanceController@datatable');
+
         Route::get('report', 'ReportController@index');
         Route::post('report/datatable', 'ReportController@datatable');
         Route::post('report/set-tanggal-lapor', 'ReportController@setTanggalLapor');
