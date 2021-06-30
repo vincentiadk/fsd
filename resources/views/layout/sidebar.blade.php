@@ -44,7 +44,7 @@
                       </a>
                   </li>
                   @endif
-                  @if(session('role_id') == 2 || session('role_id') == 1  )
+                  @if(session('role_id') == 2)
                   <li class="nav-item">
                       <a href="/admin/upload" class="nav-link">
                           <i class="nav-icon fas fa-upload"></i>
@@ -102,6 +102,30 @@
                               <a href="/admin/log" class="nav-link">
                                   <i class="far fa-circle nav-icon"></i>
                                   <p>Log Aktifitas</p>
+                              </a>
+                          </li>
+                          <li class="nav-item">
+                              <a href="/admin/provinsi" class="nav-link">
+                                  <i class="far fa-map nav-icon"></i>
+                                  <p>Provinsi</p>
+                              </a>
+                          </li>
+                          <li class="nav-item">
+                              <a href="/admin/kabupaten" class="nav-link">
+                                  <i class="far fa-map nav-icon"></i>
+                                  <p>Kabupaten / Kota</p>
+                              </a>
+                          </li>
+                          <li class="nav-item">
+                              <a href="/admin/kecamatan" class="nav-link">
+                                  <i class="far fa-map nav-icon"></i>
+                                  <p>Kecamatan</p>
+                              </a>
+                          </li>
+                          <li class="nav-item">
+                              <a href="/admin/kelurahan" class="nav-link">
+                                  <i class="far fa-map nav-icon"></i>
+                                  <p>Kelurahan</p>
                               </a>
                           </li>
                       </ul>

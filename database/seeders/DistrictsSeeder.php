@@ -13,7 +13,7 @@ class DistrictsSeeder extends Seeder
         $now = Carbon::now();
         $csv = new CsvtoArray();
         $file = public_path('website/csv/districts.csv');
-        $header = ['code', 'kabupaten_id', 'name', 'latitude', 'longitude'];
+        $header = ['code', 'kabupaten_code', 'name', 'latitude', 'longitude'];
         $data = $csv->csv_to_array($file, $header);
         $data = array_map(function ($arr) use ($now) {
             return $arr + ['created_at' => $now, 'updated_at' => $now];

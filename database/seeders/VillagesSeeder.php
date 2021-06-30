@@ -15,7 +15,7 @@ class VillagesSeeder extends Seeder
         $csv = new CsvtoArray();
         $resourceFiles = File::allFiles(public_path('website/csv/villages'));
         foreach ($resourceFiles as $file) {
-            $header = ['code', 'kecamatan_id', 'name', 'latitude', 'longitude'];
+            $header = ['code', 'kecamatan_code', 'name', 'latitude', 'longitude'];
             $data = $csv->csv_to_array($file->getRealPath(), $header);
 
             $data = array_map(function ($arr) use ($now) {

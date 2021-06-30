@@ -51,6 +51,9 @@ $('#datatable_realtime').DataTable({
     ajax: {
         url: '{{ url("admin/dashboard/datatable-realtime") }}',
         data: {},
+        headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
         type: 'POST',
     },
     columns: [

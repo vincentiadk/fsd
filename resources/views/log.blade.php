@@ -50,6 +50,9 @@ $('#datatable_serverside').DataTable({
     ajax: {
         url: '{{ url("admin/log/datatable") }}',
         data: {},
+        headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
         type: 'POST',
     },
     columns: [

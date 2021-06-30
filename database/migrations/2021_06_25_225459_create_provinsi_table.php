@@ -15,8 +15,8 @@ class CreateProvinsiTable extends Migration
     {
         Schema::create('provinsi', function (Blueprint $table) {
             $table->id('id');
-            $table->char('code', 2)->unique();
-            $table->string('name');
+            $table->char('code', 2)->unique()->index();
+            $table->string('name')->index();
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
             $table->timestamps();

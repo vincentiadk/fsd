@@ -59,5 +59,14 @@ Route::middleware('auth.admin.login')->group(function () {
         Route::get('user/view/{id}', 'UserController@view');
         Route::get('user/setting', 'UserController@setting');
 
+        Route::get('provinsi', 'ProvinsiController@index');
+        Route::post('provinsi/datatable', 'ProvinsiController@datatable');
+        Route::get('kabupaten', 'KabupatenController@index');
+        Route::post('kabupaten/datatable', 'KabupatenController@datatable');
+        Route::get('kecamatan', 'KecamatanController@index');
+        Route::post('kecamatan/datatable', 'KecamatanController@datatable');
+        Route::get('kelurahan', 'KelurahanController@index');
+        Route::post('kelurahan/datatable', 'KelurahanController@datatable');
+
     });
 });

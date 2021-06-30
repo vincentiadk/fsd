@@ -19,7 +19,7 @@
                     <a href="/admin/import" class="nav-link">Import DB</a>
                 </li>
                 @endif
-                @if(session('role_id') == 1 || session('role_id') == 2)
+                @if(session('role_id') == 2)
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="/admin/upload" class="nav-link">Upload</a>
                 </li>

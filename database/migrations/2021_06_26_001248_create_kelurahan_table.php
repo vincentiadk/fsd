@@ -16,8 +16,8 @@ class CreateKelurahanTable extends Migration
         Schema::create('kelurahan', function (Blueprint $table) {
             $table->id();
             $table->char('code', 10)->unique();
-            $table->foreignId('kecamatan_id')->constrained('kecamatan');
-            $table->string('name');
+            $table->char('kecamatan_code', 7)->nullable()->index();
+            $table->string('name')->index();
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
             $table->timestamps();

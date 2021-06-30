@@ -12,11 +12,5 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        'admin/report/datatable',
-        'admin/dashboard/datatable-realtime',
-        'admin/dashboard/datatable-tuntas',
-        'admin/dashboard/datatable-upload',
-        'admin/log/datatable',
-        'admin/user/datatable'
     ];
 }

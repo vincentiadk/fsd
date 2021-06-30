@@ -27,7 +27,7 @@ class NasabahImport implements ToCollection, WithStartRow
                 }
 
                 $kab = Kabupaten::where('name', 'LIKE', $row[27])
-                    ->where('provinsi_id', $provinsi_id)
+                    ->where('provinsi_code', $provinsi ? $provinsi->code : '')
                     ->first();
                 $kab_id = null;
                 if($kab) {
@@ -35,7 +35,7 @@ class NasabahImport implements ToCollection, WithStartRow
                 }
 
                 $kec = Kecamatan::where('name', $row[26])
-                    ->where('kabupaten_id', $kab_id)
+                    ->where('kabupaten_code', $kab ? $kab->code : '')
                     ->first();
                 $kec_id = null;
                 if($kec) {
@@ -43,7 +43,7 @@ class NasabahImport implements ToCollection, WithStartRow
                 }
 
                 $kel = Kelurahan::where('name', $row[25])
-                    ->where('kecamatan_id', $kec_id)
+                    ->where('kecamatan_code', $kec ? $kec->code : '')
                     ->first();
                 $kel_id = null;
                 if($kel) {
@@ -57,7 +57,7 @@ class NasabahImport implements ToCollection, WithStartRow
                 }
 
                 $kab_darurat = Kabupaten::where('name', 'LIKE', str_replace('KOTA ', '', $row[46]))
-                    ->where('provinsi_id', $provinsi_darurat_id)
+                    ->where('provinsi_code', $provinsi_darurat ? $provinsi_darurat->code : '')
                     ->first();
                 $kab_darurat_id = null;
                 if($kab_darurat) {

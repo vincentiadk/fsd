@@ -217,6 +217,9 @@ function downloadExcel() {
         ajax: {
             url: '{{ url("admin/report/datatable") }}',
             type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
             data: function(d) {
                 d.tanggal_lapor = $('#tanggal_lapor').val();
                 d.tanggal_lapor_akhir = $('#tanggal_lapor_akhir').val();

@@ -36,7 +36,7 @@ class Select2Controller extends Controller
         if ($id != "") {
             $id_ = Provinsi::find($id)->code;
             $data = Kabupaten::where('name', 'LIKE', '%' . request('search') . '%')
-                ->where('provinsi_id', $id_)
+                ->where('provinsi_code', $id_)
                 ->get();
         } else {
             $data = Kabupaten::where('name', 'LIKE', '%' . request('search') . '%')
@@ -64,7 +64,7 @@ class Select2Controller extends Controller
         if ($id != "") {
             $id_ = Kabupaten::find($id)->code;
             $data = Kecamatan::where('name', 'LIKE', '%' . request('search') . '%')
-                ->where('kabupaten_id', $id_)
+                ->where('kabupaten_code', $id_)
                 ->get();
         } else {
             $data = Kecamatan::where('name', 'LIKE', '%' . request('search') . '%')
@@ -91,7 +91,7 @@ class Select2Controller extends Controller
         if ($id != "") {
             $id_ = Kecamatan::find($id)->code;
             $data = Kelurahan::where('name', 'LIKE', '%' . request('search') . '%')
-                ->where('kecamatan_id', $id_)
+                ->where('kecamatan_code', $id_)
                 ->get();
         } else {
             $data = Kelurahan::where('name', 'LIKE', '%' . request('search') . '%')

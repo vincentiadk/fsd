@@ -18,9 +18,11 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <a href="/admin/user/view/0" class="btn btn-primary"> Tambah </a>
-                        </div>
-                            <table class="table table-striped table-bordered nowrap" id="datatable_serverside" style="width:100%">
+                            <div style="float:right" class="row">
+                                <a href="/admin/user/view/0" class="btn btn-primary"> Tambah </a>
+                            </div>
+                            <table class="table table-striped table-bordered nowrap" id="datatable_serverside"
+                                style="width:100%">
                                 <thead class="text-center">
                                     <tr>
                                         <th>No</th>
@@ -53,10 +55,12 @@ $('#datatable_serverside').DataTable({
     ajax: {
         url: '{{ url("admin/user/datatable") }}',
         data: {},
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
         type: 'POST',
     },
-    columns: [
-        {
+    columns: [{
             name: 'no',
             searchable: false,
             orderable: false,

@@ -98,7 +98,7 @@ class CreateNasabahTable extends Migration
         Schema::create('nasabah', function (Blueprint $table) {
             $table->id();
             $table->char('cif', 15)->nullable();
-            $table->string('no_rek', 11)->unique();
+            $table->string('no_rek', 11)->unique()->index();
             $table->char('cab', 5)->nullable();
             $table->string('status_rek')->nullable();
             $table->string('risiko')->nullable();
@@ -161,17 +161,17 @@ class CreateNasabahTable extends Migration
             $table->string('cargcd')->nullable()->comments('Kode Dati II');
             $table->string('cnxh03')->nullable()->comments('BI Lembaga pemerintah');
             $table->char('status', 10)->default('kosong');
-            $table->timestamp('status_time')->nullable();
+            $table->timestamp('status_time')->nullable()->index();
             $table->foreignId('upload_user')->nullable()->constrained('users');
-            $table->timestamp('upload_time')->nullable();
+            $table->timestamp('upload_time')->nullable()->index();
             $table->foreignId('index_user')->nullable()->constrained('users');
-            $table->timestamp('index_time')->nullable();
+            $table->timestamp('index_time')->nullable()->index();
             $table->foreignId('qc_user')->nullable()->constrained('users');
-            $table->timestamp('qc_time')->nullable();
+            $table->timestamp('qc_time')->nullable()->index();
             $table->foreignId('simpan_user')->nullable()->constrained('users');
-            $table->timestamp('simpan_time')->nullable();
-            $table->timestamp('tanggal_lapor')->nullable();
-            $table->string('map')->nullable();
+            $table->timestamp('simpan_time')->nullable()->index();
+            $table->timestamp('tanggal_lapor')->nullable()->index();
+            $table->string('map')->nullable()->index();;
             $table->string('email')->unique()->nullable();
             $table->string('nama_file')->nullable();
             $table->timestamps();
