@@ -17,6 +17,7 @@ class RoleSeeder extends Seeder
         DB::table('roles')->insert([
             [
                 'name' => 'Super Admin',
+                'permissions'=> json_encode(['all']),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
