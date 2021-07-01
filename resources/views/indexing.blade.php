@@ -44,8 +44,23 @@
         @else
         <!-- Main content -->
         <section>
-        <div class="alert alert-danger" id="validasi_element" style="display:none;">
-                <ul id="validasi_content">tes</ul>
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="alert alert-danger" id="validasi_element" style="display:none;">
+                            <ul id="validasi_content"></ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <small>Di import oleh : {{ $data['nasabah']->simpanUser ? $data['nasabah']->simpanUser->name : "" }}</small>
+                        @if ($data['nasabah']->indexUser) | 
+                        <small>Di indexing oleh : {{ $data['nasabah']->indexUser ? $data['nasabah']->indexUser->name : "" }}</small>
+                        @endif
+                        @if($data['nasabah']->qcUser) | 
+                        <small>Di QC oleh : {{ $data['nasabah']->qcUser ? $data['nasabah']->qcUser->name : "" }}</small>
+                        @endif
+                    </div>
+                </div>
             </div>
         </section>
         <section class="content pb-3">

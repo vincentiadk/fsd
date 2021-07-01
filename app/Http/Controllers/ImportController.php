@@ -44,7 +44,7 @@ class ImportController extends Controller
             $nama_file = rand() . $file->getClientOriginalName();
             $file->move(\Storage::path('excel/'), $nama_file);
 
-            $import = new NasabahImport;
+            $import = new NasabahImport(session('id'));
             Excel::import($import, \Storage::path('excel/' . $nama_file));
 
             Log::create([

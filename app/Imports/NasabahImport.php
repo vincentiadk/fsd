@@ -16,6 +16,13 @@ class NasabahImport implements ToCollection, WithStartRow
     protected $import = 0;
     protected $skip = 0;
 
+    protected $user_id;
+
+    public function __construct($user_id)
+    {
+        $this->user_id = $user_id;
+    }
+
     public function collection(Collection $rows)
     {
         foreach($rows as $row) {
@@ -193,7 +200,8 @@ class NasabahImport implements ToCollection, WithStartRow
                     'cncdu6'            => $row[59], 
                     'cnbi10'            => $row[60],
                     'cargcd'            => $row[61],
-                    'cnxh03'            => $row[62]
+                    'cnxh03'            => $row[62],
+                    'simpan_user'       => $this->user_id,
                 ]);
                 ++$this->import;
             } else {

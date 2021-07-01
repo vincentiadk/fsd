@@ -74,6 +74,11 @@ class User extends Authenticatable
         }
         return $return;
     }
+
+    public function nasabahStatusIndex()
+    {
+        return $this->hasMany(nasabahStatusIndex::class, 'user_id');
+    }
     protected static function boot()
     {
         parent::boot();

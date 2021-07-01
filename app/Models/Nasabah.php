@@ -280,6 +280,10 @@ class Nasabah extends Model
         return $return;
     }
     */
+    public function simpanUser()
+    {
+        return $this->belongsTo(User::class, 'simpan_user');
+    }
     public function indexUser()
     {
         return $this->belongsTo(User::class, 'index_user');
@@ -311,7 +315,10 @@ class Nasabah extends Model
     {
         return $this->belongsTo(Provinsi::class, 'provinsi_id');
     }
-
+    public function nasabahStatusIndex()
+    {
+        return $this->hasMany(nasabahStatusIndex::class, 'nasabah_id');
+    }
     protected static function boot()
     {
         parent::boot();
@@ -323,6 +330,11 @@ class Nasabah extends Model
                 'logable_id'    => $model->id,
                 'user_id'   => session('id'),
                 'description' => json_encode($model->toArray())
+            ]);
+            NasabahStatusIndex::create([
+                'user_id'       => session('id'),
+                'nasabah_id'    => $model->id,
+                'status'        => 'kosong'
             ]);
         });
         self::updated(function ($model) {
