@@ -6,6 +6,7 @@ use App\Models\Log;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Role;
 
 class User extends Authenticatable
 {
@@ -52,29 +53,15 @@ class User extends Authenticatable
 
     public function role()
     {
-        switch ($this->role_id) {
-            case '1':
-                $return = "Manager";
-                break;
-            case '2':
-                $return = "Operator Upload";
-                break;
-            case '3':
-                $return = "Operator Indexing";
-                break;
-            case '4':
-                $return = "Supervisor";
-                break;
-            case '5':
-                $return = "Client";
-                break;
-            default:
-                $return = "Lainnya";
-                break;
-        }
-        return $return;
+        return $this->belongsTo(Role::class, 'role_id');
     }
 
+    public function hasRole($permission)
+    {
+        if(in_array($permission, json_decode(Role::find($this->role_id)->permissions))) {
+            return true;
+        } return false;
+    }
     public function nasabahStatusIndex()
     {
         return $this->hasMany(nasabahStatusIndex::class, 'user_id');

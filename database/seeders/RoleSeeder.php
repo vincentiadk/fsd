@@ -16,29 +16,69 @@ class RoleSeeder extends Seeder
     {
         DB::table('roles')->insert([
             [
+                'name' => 'Super Admin',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'name' => 'manager',
-                'created_at' => now(), 
-                'updated_at' => now()
+                'permissions' => json_encode([
+                    'dashboard-manager',
+                    'reporting',
+                    'provinsi',
+                    'kabupaten',
+                    'kecamatan',
+                    'kelurahan',
+                    'import',
+                    'performance',
+                    'export-performance',
+                    'role',
+                    'user',
+                    'tambah-update-user',
+                    'enable-user',
+                    'export',
+                    'disable-user',
+                    'view-nasabah',
+                    'set-lapor'
+                ]),
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'name' => 'operator scan',
-                'created_at' => now(), 
-                'updated_at' => now()
+                'permissions' => json_encode([
+                    'dashboard-upload',
+                    'upload',
+                    'map',
+                ]),
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'name' => 'operator index',
-                'created_at' => now(), 
-                'updated_at' => now()
+                'permissions' => json_encode([
+                    'dashboard-index',
+                    'indexing',
+                    'indexing-simpan'
+                ]),
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'name' => 'supervisor',
-                'created_at' => now(), 
-                'updated_at' => now()
+                'permissions' => json_encode([
+                    'dashboard-supervisor',
+                    'qc',
+                    'qc-simpan'
+                ]),
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'name' => 'client',
-                'created_at' => now(), 
-                'updated_at' => now()
+                'permissions' => json_encode(['dashboard-client']),
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
         ]
         );

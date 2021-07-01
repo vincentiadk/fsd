@@ -5,15 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Provinsi;
 use App\Helper\Helper;
+use App\Helper\User;
 
 class ProvinsiController extends Controller
 {
     public function index()
     {
-        if (session('role_id') != 1) {
-            return abort(403);
-        }
-        if(session('role_id') != 1 ) {
+        if((!in_array('provinsi', json_decode(session('permissions')))) && (!session('role_id') == 1)) {
             return abort(403);
         }
         $data = [

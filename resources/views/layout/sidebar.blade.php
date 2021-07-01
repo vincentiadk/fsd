@@ -26,7 +26,7 @@
                           </p>
                       </a>
                   </li>
-                  @if(session('role_id') == 1)
+                  @if(in_array("reporting", json_decode(session('permissions'))) || (session('role_id') == 1))
                   <li class="nav-item">
                       <a href="/admin/report" class="nav-link">
                           <i class="nav-icon fas fa-columns"></i>
@@ -35,6 +35,8 @@
                           </p>
                       </a>
                   </li>
+                  @endif
+                  @if(in_array("performance", json_decode(session('permissions'))) || (session('role_id') == 1))
                   <li class="nav-item">
                       <a href="/admin/performance" class="nav-link">
                           <i class="nav-icon fas fa-columns"></i>
@@ -43,6 +45,8 @@
                           </p>
                       </a>
                   </li>
+                  @endif
+                  @if(in_array("import", json_decode(session('permissions'))) || (session('role_id') == 1))
                   <li class="nav-item">
                       <a href="/admin/import" class="nav-link">
                           <i class="nav-icon fas fa-database"></i>
@@ -52,7 +56,7 @@
                       </a>
                   </li>
                   @endif
-                  @if(session('role_id') == 2)
+                  @if(in_array("upload", json_decode(session('permissions'))) || (session('role_id') == 1))
                   <li class="nav-item">
                       <a href="/admin/upload" class="nav-link">
                           <i class="nav-icon fas fa-upload"></i>
@@ -61,6 +65,8 @@
                           </p>
                       </a>
                   </li>
+                  @endif
+                  @if(in_array("map", json_decode(session('permissions'))) || (session('role_id') == 1))
                   <li class="nav-item">
                       <a href="/admin/map" class="nav-link">
                           <i class="nav-icon fas fa-map-signs"></i>
@@ -70,7 +76,7 @@
                       </a>
                   </li>
                   @endif
-                  @if(session('role_id') == 3)
+                  @if(in_array("indexing", json_decode(session('permissions'))) || (session('role_id') == 1))
                   <li class="nav-item">
                       <a href="/admin/nasabah/indexing" class="nav-link">
                           <i class="nav-icon fas fa-upload"></i>
@@ -80,7 +86,7 @@
                       </a>
                   </li>
                   @endif
-                  @if(session('role_id') == 4)
+                  @if(in_array("qc", json_decode(session('permissions'))) || (session('role_id') == 1))
                   <li class="nav-item">
                       <a href="/admin/nasabah/qc" class="nav-link">
                           <i class="nav-icon fas fa-map-signs"></i>
@@ -90,53 +96,59 @@
                       </a>
                   </li>
                   @endif
-                  @if(session('role_id') == 1)
+                  <li class="nav-header">PENGATURAN</li>
+                  @if(in_array("user", json_decode(session('permissions'))) || (session('role_id') == 1))
                   <li class="nav-item">
-                      <a href="#" class="nav-link">
-                          <i class="nav-icon fas fa-tachometer-alt"></i>
-                          <p>
-                              Pengaturan
-                              <i class="right fas fa-angle-left"></i>
-                          </p>
+                      <a href="/admin/user" class="nav-link">
+                          <i class="far fa-user nav-icon"></i>
+                          <p>User Management</p>
                       </a>
-                      <ul class="nav nav-treeview">
-                          <li class="nav-item">
-                              <a href="/admin/user" class="nav-link">
-                                  <i class="far fa-circle nav-icon"></i>
-                                  <p>User</p>
-                              </a>
-                          </li>
-                          <li class="nav-item">
-                              <a href="/admin/log" class="nav-link">
-                                  <i class="far fa-circle nav-icon"></i>
-                                  <p>Log Aktifitas</p>
-                              </a>
-                          </li>
-                          <li class="nav-item">
-                              <a href="/admin/provinsi" class="nav-link">
-                                  <i class="far fa-map nav-icon"></i>
-                                  <p>Provinsi</p>
-                              </a>
-                          </li>
-                          <li class="nav-item">
-                              <a href="/admin/kabupaten" class="nav-link">
-                                  <i class="far fa-map nav-icon"></i>
-                                  <p>Kabupaten / Kota</p>
-                              </a>
-                          </li>
-                          <li class="nav-item">
-                              <a href="/admin/kecamatan" class="nav-link">
-                                  <i class="far fa-map nav-icon"></i>
-                                  <p>Kecamatan</p>
-                              </a>
-                          </li>
-                          <li class="nav-item">
-                              <a href="/admin/kelurahan" class="nav-link">
-                                  <i class="far fa-map nav-icon"></i>
-                                  <p>Kelurahan</p>
-                              </a>
-                          </li>
-                      </ul>
+                  </li>
+                  @endif
+                  @if(in_array("role", json_decode(session('permissions'))) || (session('role_id') == 1))
+                  <li class="nav-item">
+                      <a href="/admin/role" class="nav-link">
+                          <i class="fas fa-key nav-icon"></i>
+                          <p>Role Management</p>
+                      </a>
+                  </li>
+                  @endif
+                  <li class="nav-item">
+                      <a href="/admin/log" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Log Aktifitas</p>
+                      </a>
+                  </li>
+                  @if(in_array("provinsi", json_decode(session('permissions'))) || (session('role_id') == 1))
+                  <li class="nav-item">
+                      <a href="/admin/provinsi" class="nav-link">
+                          <i class="far fa-map nav-icon"></i>
+                          <p>Provinsi</p>
+                      </a>
+                  </li>
+                  @endif
+                  @if(in_array("kabupaten", json_decode(session('permissions'))) || (session('role_id') == 1))
+                  <li class="nav-item">
+                      <a href="/admin/kabupaten" class="nav-link">
+                          <i class="far fa-map nav-icon"></i>
+                          <p>Kabupaten / Kota</p>
+                      </a>
+                  </li>
+                  @endif
+                  @if(in_array("kecamatan", json_decode(session('permissions'))) || (session('role_id') == 1))
+                  <li class="nav-item">
+                      <a href="/admin/kecamatan" class="nav-link">
+                          <i class="far fa-map nav-icon"></i>
+                          <p>Kecamatan</p>
+                      </a>
+                  </li>
+                  @endif
+                  @if(in_array("kelurahan", json_decode(session('permissions'))) || (session('role_id') == 1))
+                  <li class="nav-item">
+                      <a href="/admin/kelurahan" class="nav-link">
+                          <i class="far fa-map nav-icon"></i>
+                          <p>Kelurahan</p>
+                      </a>
                   </li>
                   @endif
               </ul>

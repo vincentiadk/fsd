@@ -36,13 +36,15 @@
                     @if($data['type'] != 'setting')
                     <div class="form-group">
                         <label>Role</label>
+                        @if($data['user']->id == 1)
+                        <input type='text' name='role_id' readonly value='Super Admin'>
+                        @else
                         <select class="form-control" name="role_id">
-                            <option value="1" @if($data['user']->role_id == 1) selected @endif>Manager</option>
-                            <option value="2" @if($data['user']->role_id == 2) selected @endif>Operator Upload</option>
-                            <option value="3" @if($data['user']->role_id == 3) selected @endif>Operator Index</option>
-                            <option value="4" @if($data['user']->role_id == 4) selected @endif>Supervisor</option>
-                            <option value="5" @if($data['user']->role_id == 5) selected @endif>Client</option>
+                        @foreach(App\Models\Role::all() as $role)
+                            <option value="{{ $role->id }}" @if($data['user']->role_id == $role->id) selected @endif>{{ $role->name }}</option>
+                        @endforeach
                         </select>
+                        @endif
                     </div>
                     <div class="form-group">
                         <label>Enable / Disable</label>

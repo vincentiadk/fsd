@@ -14,7 +14,7 @@ class PerformanceController extends Controller
 {
     public function index()
     {
-        if (session('role_id') != 1) {
+        if((!in_array('performance', json_decode(session('permissions'))))  && !(session('role_id') == 1)) {
             return abort(403);
         }
         $data = [
@@ -82,7 +82,7 @@ class PerformanceController extends Controller
                 $response['data'][] = [
                     $nomor,
                     $val->name,
-                    $val->role(),
+                    $val->role->name,
                     $upload,
                     $benar,
                     $salah,
@@ -119,6 +119,9 @@ class PerformanceController extends Controller
 
     public function export(Request $request)
     {
+        if((!in_array('export-performance', json_decode(session('permissions')))) && !(session('role_id') == 1)){
+            return abort(403);
+        }
         $data['data'] = $this->getFiltered($request);
         $data['view'] = 'export-performance';
         $filename = rand() . '_performance-report.xlsx';

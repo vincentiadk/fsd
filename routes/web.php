@@ -53,7 +53,14 @@ Route::middleware('auth.admin.login')->group(function () {
         Route::post('select2/kecamatan', 'Select2Controller@getKecamatan');
         Route::post('select2/kelurahan', 'Select2Controller@getKelurahan');
         Route::post('select2/map', 'Select2Controller@getMap');
+        Route::post('select2/role', 'Select2Controller@getRole');
         Route::post('select2/user', 'Select2Controller@getUser');
+
+        Route::get('role', 'RoleController@index');
+        Route::post('role/datatable', 'RoleController@datatable');
+        Route::post('role/store', 'RoleController@store');
+        Route::post('permission/store', 'RoleController@storePermission');
+        Route::get('permission/view/{id}', 'RoleController@view');
 
         Route::get('upload', 'UploadController@index');
         Route::post('upload/store', 'UploadController@store');

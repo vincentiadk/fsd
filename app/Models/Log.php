@@ -26,25 +26,9 @@ class Log extends Model
     {
         $return = '';
         if ($this->description != '') {
-            /*if (isset(json_decode($this->description, true)[0])) {
-                $before = json_decode($this->description, true)[0];
-                $return .= 'before <ul>';
-                foreach ($before as $key => $value) {
-                    $return .= '<li>' . $key . ' - ' . $value . '</li>';
-                }
-                $return .= "</ul>";
+            foreach (json_decode($this->description, true) as $key => $value) {
+                $return .= '<li>' . $key . ' - ' . $value . '</li>';
             }
-            if (isset(json_decode($this->description, true)[1])) {
-                $after = json_decode($this->description, true)[1];
-                $return .= 'after <ul>';
-                foreach ($after as $key => $value) {
-                    $return .= '<li>' . $key . ' - ' . $value . '</li>';
-                }
-                $return .= "</ul>";
-            } else {*/
-                foreach (json_decode($this->description, true) as $key => $value) {
-                    $return .= '<li>' . $key . ' - ' . $value . '</li>';
-                }
         }
         return $return;
     }

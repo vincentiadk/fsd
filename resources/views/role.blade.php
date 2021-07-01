@@ -22,7 +22,7 @@
                                 <ul id="validasi_content"></ul>
                             </div>
                             <div style="float:right" class="row">
-                                <a href="/admin/user/view/0" class="btn btn-primary"> Tambah </a>
+                                <a href="" class="btn btn-primary" onclick="tambah()"> Tambah </a>
                             </div>
                             <table class="table table-striped table-bordered nowrap" id="datatable_serverside"
                                 style="width:100%">
@@ -30,9 +30,6 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Nama</th>
-                                        <th>Username</th>
-                                        <th>Email</th>
-                                        <th>Role</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -49,18 +46,21 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel50">Konfirmasi</h4>
+                    <h4 class="modal-title" id="myModalLabel"></h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <h4>Anda yakin akan <span id="spanLock"></span>? </h4>
-                    <p id="pLock" style="color:orange"></p>
+                <input type="hidden" id="id_role" name="id_rol">
+                    <div class="form-group">
+                        <label>Nama Role Akses</label>
+                        <input type="text" class="form-control" id="role_name" name="name">
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-info" id="btn_save_lock">Ya</button>
-                    <button type="button" class="btn btn-danger" onclick="cancel()" id="btn_cancel_lock">Batal</button>
+                    <button type="button" class="btn btn-info" onclick="simpan()">Simpan</button>
+                    <button type="button" class="btn btn-danger" onclick="cancel()" id="btn_cancel">Batal</button>
                 </div>
             </div>
         </div>
@@ -77,7 +77,7 @@ var oTable = $('#datatable_serverside').DataTable({
     ],
     iDisplayInLength: 10,
     ajax: {
-        url: '{{ url("admin/user/datatable") }}',
+        url: '{{ url("admin/role/datatable") }}',
         data: {},
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -97,24 +97,6 @@ var oTable = $('#datatable_serverside').DataTable({
             className: 'align-middle text-center'
         },
         {
-            name: 'username',
-            searchable: false,
-            orderable: false,
-            className: 'align-middle text-center'
-        },
-        {
-            name: 'email',
-            searchable: false,
-            orderable: false,
-            className: 'align-middle text-center'
-        },
-        {
-            name: 'role',
-            searchable: false,
-            orderable: false,
-            className: 'align-middle text-center'
-        },
-        {
             name: 'aksi',
             searchable: false,
             orderable: false,
@@ -122,20 +104,22 @@ var oTable = $('#datatable_serverside').DataTable({
         }
     ]
 });
-
-function disableUser(id) {
-    getUser(id, 0);
+function edit(id) {
+    $('#modal_confirmation').modal('show');
+    getRole(id);
+}
+function tambah() {
     $('#modal_confirmation').modal('show');
 }
-
-function enableUser(id) {
-    getUser(id, 1);
-    $('#modal_confirmation').modal('show');
-}
-
-function getUser(id, type) {
+function cancel() {
+    $('#id_role').val('');
+    $('#role_name').value('');
+    $('#modal_confirmation').modal('hide');
+  }
+function getRole(id) {
+    event.preventDefault();
     $.ajax({
-        url: '{{ url("admin/select2/user") }}',
+        url: '{{ url("admin/select2/role") }}',
         type: 'POST',
         dataType: 'JSON',
         data : {
@@ -151,17 +135,8 @@ function getUser(id, type) {
         },
         success: function(response) {
             loadingClose('.modal-content');
-            if (type == 1) {
-                $('#spanLock').html('<b>membuka blokir</b> User : ' + response.name);
-                $('#pLock').html(
-                    '*) Setelah dibuka blokir, user dapat login ke dalam sistem dan melakukan pekerjaannya kembali.'
-                );
-                $('#btn_save_lock').attr('onclick', 'doDisableEnable(' + id + ', 1)');
-            } else {
-                $('#spanLock').html('<b>memblokir</b> User : ' + response.name);
-                $('#pLock').html('*) Setelah diblokir, user <b>tidak dapat</b> login ke dalam sistem.');
-                $('#btn_save_lock').attr('onclick', 'doDisableEnable(' + id + ', 0)');
-            }
+            $('#id_role').val(response.id);
+            $('#role_name').val(response.name);
         },
         error: function() {
             loadingClose('.modal-content');
@@ -173,23 +148,17 @@ function getUser(id, type) {
         }
     })
 }
-function cancel() {
-    $('#modal_confirmation').modal('hide');
-  }
-function doDisableEnable(id, type) {
-    if (type == 1) {
-        var ajax_url = '{{ url("admin/user/enable") }}';
-    } else {
-        var ajax_url = '{{ url("admin/user/disable") }}';
-    }
+
+function simpan() {
     $.ajax({
-        url: ajax_url,
+        url: '{{ url("admin/role/store") }}',
         type: 'POST',
         headers: {
             'X-CSRF-TOKEN': '{{ csrf_token() }}'
         },
         data: {
-            id: id,
+            id: $('#id_role').val(),
+            name: $('#role_name').val(),
         },
         dataType: 'JSON',
         beforeSend: function() {
@@ -216,7 +185,7 @@ function doDisableEnable(id, type) {
                     title: response.message
                 });
             }
-            $('#modal_confirmation').modal('hide');
+            cancel();
         },
         error: function() {
             loadingClose('.modal-content');

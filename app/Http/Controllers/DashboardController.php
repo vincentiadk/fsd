@@ -10,44 +10,35 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        switch (session('role_id')) {
-            case 1:
-                $data = [
-                    'title' => 'Dashboard Manager',
-                    'content' => 'dashboard-manager',
-                ];
-                break;
-            case 2:
-                $data = [
-                    'title' => 'Dashboard Operator Upload',
-                    'content' => 'dashboard-upload',
-                ];
-                break;
-            case 3:
-                $data = [
-                    'title' => 'Dashboard Operator Index',
-                    'content' => 'dashboard-index',
-                ];
-                break;
-            case 4:
-                $data = [
-                    'title' => 'Dashboard Supervisor',
-                    'content' => 'dashboard-supervisor',
-                ];
-                break;
-            case 5:
-                $data = [
-                    'title' => 'Dashboard Client',
-                    'content' => 'dashboard-client',
-                ];
-                break;
-            default:
-                $data = [
-                    'title' => 'Dashboard Client',
-                    'content' => 'dashboard-client',
-                ];
-                break;
+        if(in_array('dashboard-manager', json_decode(session('permissions'))) || session('role_id') == 1) {
+            $data = [
+                'title' => 'Dashboard Manager',
+                'content' => 'dashboard-manager',
+            ];
+        } else if(in_array('dashboard-upload', json_decode(session('permissions')))) {
+            $data = [
+                'title' => 'Dashboard Operator Upload',
+                'content' => 'dashboard-upload',
+            ];
+        } else if(in_array('dashboard-index', json_decode(session('permissions')))) {
+            $data = [
+                'title' => 'Dashboard Operator Index',
+                'content' => 'dashboard-index',
+            ];
+        } else if(in_array('dashboard-supervisor', json_decode(session('permissions')))) {
+            $data = [
+                'title' => 'Dashboard Supervisor',
+                'content' => 'dashboard-supervisor',
+            ];
+        } else if(in_array('dashboard-client', json_decode(session('permissions')))) {
+            $data = [
+                'title' => 'Dashboard Client',
+                'content' => 'dashboard-client',
+            ];
+        } else {
+            return abort(403);
         }
+
         $data['logs'] = Helper::getLogs(session('id'));
 
         return view('layout.index', ['data' => $data]);

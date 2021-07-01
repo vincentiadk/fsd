@@ -7,6 +7,7 @@ use App\Models\Kecamatan;
 use App\Models\Kelurahan;
 use App\Models\Nasabah;
 use App\Models\Provinsi;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -124,5 +125,10 @@ class Select2Controller extends Controller
     public function getUser()
     {
         return User::findOrFail(request('id'));
+    }
+
+    public function getRole()
+    {
+        return Role::findOrFail(request('id'));
     }
 }

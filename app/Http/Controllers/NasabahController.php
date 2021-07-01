@@ -11,7 +11,7 @@ class NasabahController extends Controller
 {
     public function indexing()
     {
-        if (session('role_id') != 3) {
+        if( !in_array('indexing', json_decode(session('permissions'))) && !(session('role_id') == 1)) {
             return abort(403);
         }
         $nasabah_salah = Nasabah::where('status', 'salah')
@@ -39,12 +39,14 @@ class NasabahController extends Controller
                 $nasabah_baru = Nasabah::where('status', 'baru')
                     ->first();
                 if ($nasabah_baru) {
-                    $nasabah_baru->update([
-                        'index_user' => session('id'),
-                        'index_time' => now(),
-                        'status' => 'indexing',
-                        'status_time' => now(),
-                    ]);
+                    if( ! session('role_id') == 1) {
+                        $nasabah_baru->update([
+                            'index_user' => session('id'),
+                            'index_time' => now(),
+                            'status' => 'indexing',
+                            'status_time' => now(),
+                        ]);
+                    }
                     $data['nasabah'] = $nasabah_baru;
                     $data['file'] = $nasabah_baru->nama_file != "" ? "true" : '';
                 } else {
@@ -58,7 +60,7 @@ class NasabahController extends Controller
 
     public function qc()
     {
-        if (session('role_id') != 4) {
+        if( !in_array('qc', json_decode(session('permissions'))) && !(session('role_id') == 1) ) {
             return abort(403);
         }
         $nasabah_qc = Nasabah::where('status', 'qc')
@@ -86,12 +88,14 @@ class NasabahController extends Controller
                     ->whereNull('qc_user')
                     ->first();
                 if ($nasabah_update_new) {
-                    $nasabah_update_new->update([
-                        'qc_user' => session('id'),
-                        'qc_time' => now(),
-                        'status' => 'qc',
-                        'status_time' => now(),
-                    ]);
+                    if( ! session('role_id') == 1) {
+                        $nasabah_update_new->update([
+                            'qc_user' => session('id'),
+                            'qc_time' => now(),
+                            'status' => 'qc',
+                            'status_time' => now(),
+                        ]);
+                    }
                     $data['nasabah'] = $nasabah_update_new;
                     $data['file'] = $nasabah_update_new->nama_file != "" ? "true" : "";
                 } else {
@@ -104,10 +108,13 @@ class NasabahController extends Controller
 
     public function store()
     {
+        if( session('role_id') == 1) {
+            return abort(403);
+        }
         $id = request('id_nasabah');
         $nasabah = Nasabah::findOrFail($id);
 
-        if (session('role_id') == 4) {
+        if(!in_array('qc-simpan', json_decode(session('permissions')))) {
             $nasabah->update([
                 'status' => request('status'),
                 'index_time' => now(),
@@ -119,7 +126,7 @@ class NasabahController extends Controller
             ];
         }
 
-        if (session('role_id') == 3) {
+        if(!in_array('indexing-simpan', json_decode(session('permissions')))) {
             Validator::extend('without_spaces', function ($attr, $value) {
                 return preg_match('/^\S*$/u', $value);
             });
@@ -213,7 +220,7 @@ class NasabahController extends Controller
 
     public function view($id)
     {
-        if (session('role_id') != 1) {
+        if((!in_array('view-nasabah', json_decod(session('permissions')))) && (!session('role_id') == 1)) {
             return abort(403);
         }
         $data = [

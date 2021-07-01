@@ -13,7 +13,7 @@ class ReportController extends Controller
 {
     public function index()
     {
-        if(session('role_id') != 1) {
+        if((!in_array('reporting', json_decode(session('permissions')))) && (!session('role_id') == 1)){
             return abort(403);
         }
         $data = [
@@ -91,6 +91,9 @@ class ReportController extends Controller
 
     public function export(Request $request)
     {
+        if((!in_array('export', json_decode(session('permissions')))) && (!session('role_id') == 1)){
+            return abort(403);
+        }
         $data['data'] = $this->getFiltered($request);
         $data['view'] = 'export';
         $filename = rand() . '_report.xlsx';
@@ -133,6 +136,9 @@ class ReportController extends Controller
 
     public function setTanggalLapor(Request $request)
     {
+        if((!in_array('set-lapor', json_decode(session('permissions')))) && (!session('role_id') == 1)) {
+            return abort(403);
+        }
         if (request('ids') == '') {
             return response()->json('Tidak ada nasabah yang dipilih.');
         }

@@ -12,7 +12,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        if (session('role_id') != 1) {
+        if((!in_array('user', json_decode(session('permissions')))) && (!session('role_id') == 1)) {
             return abort(403);
         }
         $data = [
@@ -61,12 +61,15 @@ class UserController extends Controller
                 } else {
                     $aksi .= "<button class='btn btn-primary' onclick='enableUser($val->id)'>Enable</button>";
                 }
+                if($val->id == 1) {
+                    $aksi = "";
+                }
                 $response['data'][] = [
                     $nomor,
                     $val->name,
                     $val->username,
                     $val->email,
-                    $val->role(),
+                    $val->role->name,
                     $aksi .
                     "<a href='" . url("admin/user/view/" . $val->id) . "' class='btn btn-success'>Lihat</a>",
                 ];
@@ -87,7 +90,7 @@ class UserController extends Controller
 
     public function view($id)
     {
-        if (session('role_id') != 1) {
+        if((!in_array('tambah-update-user', json_decode(session('permissions')))) && (!session('role_id') == 1)) {
             return abort(403);
         }
         $data = [
@@ -222,7 +225,7 @@ class UserController extends Controller
 
     public function enable()
     {
-        if (session('role_id') != 1) {
+        if((!in_array('enable-user', json_decode(session('permissions')))) && (!session('role_id') == 1)){
             return abort(403);
         }
         User::where('id', request('id'))->update(['enable' => 1]);
@@ -235,7 +238,7 @@ class UserController extends Controller
 
     public function disable()
     {
-        if (session('role_id') != 1) {
+        if((!in_array('disable-user', json_decode(session('permissions')))) && (!session('role_id') == 1)){
             return abort(403);
         }
         User::where('id', request('id'))->update(['enable' => 0]);

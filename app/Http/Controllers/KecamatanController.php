@@ -10,7 +10,7 @@ class KecamatanController extends Controller
 {
     public function index()
     {
-        if(session('role_id') != 1 ) {
+        if( (!in_array('kecamatan', json_decode(session('permissions')))) && (!session('role_id') == 1)) {
             return abort(403);
         }
         $data = [

@@ -9,7 +9,7 @@ class MapController extends Controller
 {
     public function index()
     {
-        if(session('role_id') != 2) {
+        if((!in_array('map', json_decode(session('permissions')))) && !(session('role_id') == 1) ){
             return abort(403);
         }
         $data = [
