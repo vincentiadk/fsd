@@ -46,8 +46,9 @@ class Role extends Model
             'enable-user' => 'Enable User',
             'disable-user' => 'Disable User',
             'role' => 'Role Management',
+            'simpan-role' => 'Simpan / Update Role',
             'view-permission' => 'Lihat Hak Akses',
-            'simpan-permission' => 'Simpan Hak Akses',
+            'simpan-permission' => 'Simpan / Update Hak Akses',
             
         ];
     }

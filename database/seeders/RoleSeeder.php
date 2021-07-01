@@ -39,7 +39,11 @@ class RoleSeeder extends Seeder
                     'export',
                     'disable-user',
                     'view-nasabah',
-                    'set-lapor'
+                    'set-lapor',
+                    'role',
+                    'simpan-role',
+                    'view-permission',
+                    'simpan-permission'
                 ]),
                 'created_at' => now(),
                 'updated_at' => now(),
