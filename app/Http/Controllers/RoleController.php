@@ -48,7 +48,8 @@ class RoleController extends Controller
             foreach ($queryData as $val) {
                 $aksi = "";
                 if($val->id != 1) {
-                    $aksi = "<a href='" . url("admin/permission/view/" . $val->id) . "' class='btn btn-success'><i class='fas fa-key nav-icon'></i>Atur Hak Akses</a>";
+                    $aksi = "<a href='" . url("admin/permission/view/" . $val->id) . "' class='btn btn-success'><i class='fas fa-key nav-icon'></i>Atur Hak Akses</a>
+                    <a href='' onclick='edit($val->id)' class='btn btn-primary'>Ubah</a>";
                 }
                 $response['data'][] = [
                     $nomor,
