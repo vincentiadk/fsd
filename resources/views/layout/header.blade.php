@@ -11,6 +11,7 @@
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="/admin/dashboard" class="nav-link">Dashboard</a>
                 </li>
+                <!--
                 @if(session('role_id') == 1)
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="/admin/report" class="nav-link">Reporting</a>
@@ -40,12 +41,11 @@
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="/admin/nasabah/qc" class="nav-link">QC</a>
                 </li>
-                @endif
+                @endif-->
             </ul>
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
-                <!-- Logs Dropdown Menu -->
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <i class="fas fa-clipboard-list"></i>
