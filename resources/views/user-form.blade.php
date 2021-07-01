@@ -34,25 +34,31 @@
                         <input type="email" class="form-control" value="{{ $data['user']->email }}" name="email">
                     </div>
                     @if($data['type'] != 'setting')
-                    <div class="form-group">
-                        <label>Role</label>
                         @if($data['user']->id == 1)
-                        <input type='text' name='role_id' readonly value='Super Admin'>
+                        <div class="form-group">
+                            <label>Role</label>
+                            <select class="form-control" name="role_id" readonly>
+                                <option value="1" selected> Super Admin </option>
+                            </select>
+                        </div>
+                        <input type="hidden" value="1" name="enable">
                         @else
-                        <select class="form-control" name="role_id">
-                        @foreach(App\Models\Role::all() as $role)
-                            <option value="{{ $role->id }}" @if($data['user']->role_id == $role->id) selected @endif>{{ $role->name }}</option>
-                        @endforeach
-                        </select>
+                        <div class="form-group">
+                            <select class="form-control" name="role_id">
+                                @foreach(App\Models\Role::all() as $role)
+                                <option value="{{ $role->id }}" @if($data['user']->role_id == $role->id) selected
+                                    @endif>{{ $role->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Enable / Disable</label>
+                            <select class="form-control" name="enable">
+                                <option value="1" @if($data['user']->enable == 1) selected @endif>Enable</option>
+                                <option value="0" @if($data['user']->enable == 0) selected @endif>Disable</option>
+                            </select>
+                        </div>
                         @endif
-                    </div>
-                    <div class="form-group">
-                        <label>Enable / Disable</label>
-                        <select class="form-control" name="enable">
-                            <option value="1" @if($data['user']->enable == 1) selected @endif>Enable</option>
-                            <option value="0" @if($data['user']->enable == 0) selected @endif>Disable</option>
-                        </select>
-                    </div>
                     @endif
                     @if($data['type'] == 'setting')
                     <div class="form-group">
@@ -107,7 +113,7 @@ function simpan() {
                         icon: 'success',
                         title: response.message
                     });
-                    if($('#password').val() != '') {
+                    if ($('#password').val() != '') {
                         $('#password').val('');
                         $('#password_new').val('');
                         $('#password_confirm').val('');
@@ -142,5 +148,4 @@ function simpan() {
 
     });
 }
-
 </script>
