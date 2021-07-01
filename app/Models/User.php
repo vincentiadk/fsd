@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Log;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\Log;
 
 class User extends Authenticatable
 {
@@ -23,7 +23,7 @@ class User extends Authenticatable
         'role_id',
         'email_verified_at',
         'username',
-        'last_login'
+        'last_login',
     ];
 
     /**
@@ -81,29 +81,47 @@ class User extends Authenticatable
         self::created(function ($model) {
             Log::create([
                 'activity' => 'create',
-                'logable_type'  => 'users',
-                'logable_id'    => $model->id,
-                'user_id'   => session('id'),
-                'description' => json_encode($model->toArray())
+                'logable_type' => 'users',
+                'logable_id' => $model->id,
+                'user_id' => session('id'),
+                'description' => json_encode($model->toArray()),
             ]);
         });
         self::updated(function ($model) {
-            if($model->wasChanged('password')) {
+            if ($model->wasChanged('password')) {
                 Log::create([
                     'activity' => 'change password',
-                    'logable_type'  => 'users',
-                    'logable_id'    => $model->id,
-                    'user_id'   => session('id'),
+                    'logable_type' => 'users',
+                    'logable_id' => $model->id,
+                    'user_id' => session('id'),
                 ]);
-            } else if($model->wasChanged('last_login')) {
-
+            } else if ($model->wasChanged('enable')) {
+                if ($model->enable == 0) {
+                    Log::create([
+                        'activity' => 'disable',
+                        'logable_type' => 'users',
+                        'logable_id' => $model->id,
+                        'user_id' => session('id'),
+                    ]);
+                } else {
+                    if ($model->enable == 1) {
+                        Log::create([
+                            'activity' => 'enable',
+                            'logable_type' => 'users',
+                            'logable_id' => $model->id,
+                            'user_id' => session('id'),
+                        ]);
+                    }
+                }
+            } else if ($model->wasChanged('last_login')) {
+                // do nothing
             } else {
                 Log::create([
                     'activity' => 'update',
-                    'logable_type'  => 'users',
-                    'logable_id'    => $model->id,
-                    'user_id'   => session('id'),
-                    'description' => json_encode($model->getChanges())
+                    'logable_type' => 'users',
+                    'logable_id' => $model->id,
+                    'user_id' => session('id'),
+                    'description' => json_encode($model->getChanges()),
                 ]);
             }
         });
